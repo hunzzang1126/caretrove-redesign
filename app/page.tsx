@@ -46,7 +46,7 @@ export default function Home() {
                 <Link
                   key={t}
                   href={`/search?q=${encodeURIComponent(t)}`}
-                  className="glass rounded-full px-4 py-2 text-[13.5px] font-semibold text-white transition-transform hover:scale-[1.04] active:scale-[0.98]"
+                  className="glass relative isolate rounded-full px-4 py-2 text-[13.5px] font-semibold text-white transition-transform hover:scale-[1.04] active:scale-[0.98]"
                 >
                   {t}
                 </Link>
@@ -75,7 +75,7 @@ export default function Home() {
         <div className="mt-8 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
           {clinics.map((clinic, i) => (
             <Reveal key={clinic.slug} delay={(i % 3) * 0.06}>
-              <ClinicCard clinic={clinic} />
+              <ClinicCard clinic={clinic} variant="glass" />
             </Reveal>
           ))}
         </div>
