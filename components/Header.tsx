@@ -32,12 +32,16 @@ export default function Header({ pillOnScroll = false }: { pillOnScroll?: boolea
   return (
     <header className="sticky top-0 z-40 border-b border-stone-100 bg-white/95 backdrop-blur-md">
       <div className="mx-auto grid h-[72px] max-w-[1500px] grid-cols-[1fr_auto_1fr] items-center px-5 md:px-10">
-        <Link href="/" aria-label="CareTrove home" className="justify-self-start">
+        <Link
+          href="/"
+          aria-label="CareTrove home"
+          className="col-start-1 justify-self-start"
+        >
           <Image src="/logo.svg" alt="CareTrove" width={132} height={31} priority />
         </Link>
 
         <div
-          className={`hidden justify-self-center transition-all duration-300 md:block ${
+          className={`col-start-2 hidden justify-self-center transition-all duration-300 md:block ${
             showPill
               ? "translate-y-0 opacity-100"
               : "pointer-events-none -translate-y-2 opacity-0"
@@ -46,7 +50,7 @@ export default function Header({ pillOnScroll = false }: { pillOnScroll?: boolea
           <SearchPill compact />
         </div>
 
-        <nav className="flex items-center gap-1 justify-self-end md:gap-2">
+        <nav className="col-start-3 flex items-center gap-1 justify-self-end md:gap-2">
           <Link
             href="/search"
             className="hidden rounded-full px-4 py-2 text-[15px] font-semibold text-ink transition-colors hover:bg-stone-100 lg:block"

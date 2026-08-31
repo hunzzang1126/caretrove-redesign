@@ -33,7 +33,7 @@ export default function Home() {
         <div className="relative flex w-full max-w-[880px] flex-col items-center">
           <HeroTitle />
           <Reveal delay={0.3}>
-            <p className="mt-5 text-center text-[17px] font-medium text-white/85">
+            <p className="mx-auto mt-4 max-w-[30ch] text-balance text-center text-[15px] font-medium leading-snug text-white/85 md:mt-5 md:text-[17px]">
               Verified clinics across Michigan, confirmed within 24 hours.
             </p>
           </Reveal>
@@ -72,9 +72,13 @@ export default function Home() {
             </Link>
           </div>
         </Reveal>
-        <div className="mt-8 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="scrollbar-none -mx-5 mt-6 flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-pl-5 px-5 pb-2 sm:mx-0 sm:mt-8 sm:grid sm:snap-none sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3">
           {clinics.map((clinic, i) => (
-            <Reveal key={clinic.slug} delay={(i % 3) * 0.06}>
+            <Reveal
+              key={clinic.slug}
+              delay={(i % 3) * 0.06}
+              className="w-[80%] shrink-0 snap-start sm:w-auto sm:shrink"
+            >
               <ClinicCard clinic={clinic} />
             </Reveal>
           ))}
