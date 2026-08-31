@@ -7,7 +7,7 @@ import SearchPill from "@/components/SearchPill";
 import HeroTitle from "@/components/HeroTitle";
 import ClinicCard from "@/components/ClinicCard";
 import MichiganMap from "@/components/MichiganMap";
-import { categories, cities, clinics, heroImage, providerBandImage } from "@/lib/data";
+import { categories, cities, clinics, providerBandImage } from "@/lib/data";
 
 const popular = ["Botox", "HydraFacial", "Deep Tissue Massage", "IV Vitamin Therapy", "Laser Hair Removal"];
 
@@ -16,24 +16,51 @@ export default function Home() {
     <>
       <Header pillOnScroll />
 
-      {/* Hero: short photo band, search pill front and center */}
-      <section className="relative flex min-h-[560px] flex-col items-center justify-center bg-[#b3a290] px-5 py-20 md:min-h-[62dvh]">
-        <div className="absolute inset-0 overflow-hidden">
-          <Image
-            src={heroImage}
-            alt=""
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover motion-safe:animate-[kenburns_9s_ease-out_both]"
-          />
+      {/* Hero: cream editorial band with floating treatment photos */}
+      <section className="topo-pattern relative overflow-hidden bg-cream px-5 pb-16 pt-14 md:pb-24 md:pt-20">
+        {/* Floating photo objects, desktop only */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-[4%] top-1/2 hidden w-[200px] -translate-y-[58%] motion-safe:animate-[ct-float_7s_ease-in-out_infinite] xl:block"
+          style={{ "--r": "-6deg" } as React.CSSProperties}
+        >
+          <div className="relative aspect-[4/5] overflow-hidden rounded-3xl shadow-[0_24px_50px_-18px_rgba(28,25,23,0.35)]">
+            <Image
+              src="https://images.unsplash.com/photo-1584515933487-779824d29309?w=600&q=80&auto=format&fit=crop"
+              alt=""
+              fill
+              sizes="200px"
+              className="object-cover"
+            />
+            <span className="glass-sheen" aria-hidden />
+          </div>
         </div>
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/25 to-black/45" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_60%_at_50%_42%,transparent_30%,rgba(0,0,0,0.28)_100%)]" />
-        <div className="relative flex w-full max-w-[880px] flex-col items-center">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute right-[4%] top-1/2 hidden w-[185px] -translate-y-[46%] motion-safe:animate-[ct-float_9s_ease-in-out_infinite] xl:block"
+          style={{ "--r": "5deg" } as React.CSSProperties}
+        >
+          <div className="relative aspect-[4/5] overflow-hidden rounded-3xl shadow-[0_24px_50px_-18px_rgba(28,25,23,0.35)]">
+            <Image
+              src="https://images.unsplash.com/photo-1620733723572-11c53f73a416?w=600&q=80&auto=format&fit=crop"
+              alt=""
+              fill
+              sizes="185px"
+              className="object-cover"
+            />
+            <span className="glass-sheen" aria-hidden />
+          </div>
+          <div className="absolute -bottom-4 -left-10 flex items-center gap-1.5 rounded-full bg-white px-4 py-2.5 shadow-[0_12px_30px_-10px_rgba(28,25,23,0.3)]">
+            <span className="text-[14px] font-extrabold">4.7</span>
+            <span className="flex items-center text-brand">★</span>
+            <span className="text-[12.5px] text-stone-500">191 verified reviews</span>
+          </div>
+        </div>
+
+        <div className="relative mx-auto flex w-full max-w-[780px] flex-col items-center">
           <HeroTitle />
           <Reveal delay={0.3}>
-            <p className="mx-auto mt-4 max-w-[30ch] text-balance text-center text-[15px] font-medium leading-snug text-white/85 md:mt-5 md:max-w-none md:text-[17px]">
+            <p className="mx-auto mt-4 max-w-[30ch] text-balance text-center text-[15px] font-medium leading-snug text-stone-600 md:mt-5 md:max-w-none md:text-[17px]">
               Verified clinics across Michigan, confirmed within 24 hours.
             </p>
           </Reveal>
@@ -46,7 +73,7 @@ export default function Home() {
                 <Link
                   key={t}
                   href={`/search?q=${encodeURIComponent(t)}`}
-                  className="glass relative isolate rounded-full px-4 py-2 text-[13.5px] font-semibold text-white transition-transform hover:scale-[1.04] active:scale-[0.98]"
+                  className="rounded-full border border-stone-200 bg-white px-4 py-2 text-[13.5px] font-semibold text-stone-700 shadow-sm transition-all hover:border-brand hover:text-brand-text active:scale-[0.98]"
                 >
                   {t}
                 </Link>

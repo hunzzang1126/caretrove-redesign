@@ -67,6 +67,15 @@ input:focus-visible {
     transform: scale(1);
   }
 }
+@keyframes ct-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(var(--r, 0deg));
+  }
+  50% {
+    transform: translateY(-12px) rotate(var(--r, 0deg));
+  }
+}
 
 /* Positioning comes from markup (relative/absolute/fixed utilities): un-layered
    CSS here would beat Tailwind's layered utilities regardless of specificity. */

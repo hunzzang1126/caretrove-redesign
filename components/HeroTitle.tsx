@@ -10,7 +10,7 @@ export default function HeroTitle() {
 
   return (
     <h1
-      className="text-center text-[clamp(36px,7.8vw,64px)] font-extrabold leading-[1.06] tracking-tight text-white"
+      className="text-center text-[clamp(36px,7.8vw,64px)] font-extrabold leading-[1.06] tracking-tight text-ink"
       style={{ fontFamily: "var(--font-display)" }}
     >
       {WORDS.map((w, i) => (
