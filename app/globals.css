@@ -44,3 +44,88 @@ input:focus-visible {
   outline: 2px solid #f37521;
   outline-offset: 2px;
 }
+
+/* Frosted glass surfaces (fallback below for reduced transparency) */
+.glass {
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    0 8px 28px rgba(28, 25, 23, 0.18);
+}
+.glass-deep {
+  background: rgba(28, 25, 23, 0.32);
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    0 12px 36px rgba(28, 25, 23, 0.3);
+}
+@media (prefers-reduced-transparency: reduce) {
+  .glass {
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .glass-deep {
+    background: rgba(28, 25, 23, 0.92);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+/* Map pins */
+.ct-pin {
+  cursor: pointer;
+  filter: drop-shadow(0 4px 8px rgba(28, 25, 23, 0.35));
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: bottom center;
+}
+.ct-pin:hover,
+.ct-pin-active {
+  transform: scale(1.22);
+  z-index: 5;
+}
+
+/* Map popup card */
+.maplibregl-popup-content {
+  padding: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 16px 40px -12px rgba(28, 25, 23, 0.35);
+}
+.ct-popup {
+  display: block;
+  width: 220px;
+  text-decoration: none;
+  color: #1c1917;
+  font-family: var(--font-sans);
+}
+.ct-popup img {
+  display: block;
+  width: 100%;
+  height: 118px;
+  object-fit: cover;
+}
+.ct-popup-body {
+  display: block;
+  padding: 10px 14px 12px;
+}
+.ct-popup-name {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+.ct-popup-meta {
+  display: block;
+  margin-top: 2px;
+  font-size: 12.5px;
+  color: #78716c;
+}
+.maplibregl-ctrl-attrib {
+  font-size: 10px;
+}

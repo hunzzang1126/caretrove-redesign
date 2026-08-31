@@ -51,11 +51,15 @@ export type Clinic = {
   address?: string;
   phone?: string;
   about?: string;
+  lng: number;
+  lat: number;
 };
 
 export const clinics: Clinic[] = [
   {
     slug: "great-lakes-wellness-ann-arbor",
+    lng: -83.743,
+    lat: 42.2808,
     name: "Great Lakes Wellness",
     city: "Ann Arbor",
     category: "Preventative",
@@ -77,6 +81,8 @@ export const clinics: Clinic[] = [
   },
   {
     slug: "motor-city-medspa-birmingham",
+    lng: -83.2113,
+    lat: 42.5467,
     name: "Motor City MedSpa",
     city: "Birmingham",
     category: "Cosmetic",
@@ -91,6 +97,8 @@ export const clinics: Clinic[] = [
   },
   {
     slug: "kimmie-e-esthetics",
+    lng: -83.2455,
+    lat: 42.5837,
     name: "Kimmie E. Esthetics",
     city: "Bloomfield Township",
     category: "Cosmetic",
@@ -105,6 +113,8 @@ export const clinics: Clinic[] = [
   },
   {
     slug: "soluna-wellness-studio",
+    lng: -82.9199,
+    lat: 42.587,
     name: "Soluna Wellness Studio",
     city: "Clinton Township",
     category: "Restorative",
@@ -119,6 +129,8 @@ export const clinics: Clinic[] = [
   },
   {
     slug: "lakeshore-aesthetics-detroit",
+    lng: -83.0458,
+    lat: 42.3314,
     name: "Lakeshore Aesthetics",
     city: "Detroit",
     category: "Cosmetic",
@@ -133,6 +145,8 @@ export const clinics: Clinic[] = [
   },
   {
     slug: "aqua-aesthetics-wellness",
+    lng: -84.4839,
+    lat: 42.737,
     name: "Aqua Aesthetics & Wellness",
     city: "East Lansing",
     category: "Restorative",

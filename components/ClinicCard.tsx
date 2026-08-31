@@ -1,11 +1,27 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
-import { Star } from "@phosphor-icons/react/dist/ssr";
+import { useState } from "react";
+import { Star, Heart } from "@phosphor-icons/react";
 import type { Clinic } from "@/lib/data";
 
-export default function ClinicCard({ clinic }: { clinic: Clinic }) {
+export default function ClinicCard({
+  clinic,
+  onHover,
+}: {
+  clinic: Clinic;
+  onHover?: (slug: string | null) => void;
+}) {
+  const [saved, setSaved] = useState(false);
+
   return (
-    <Link href={`/clinic/${clinic.slug}`} className="group block">
+    <Link
+      href={`/clinic/${clinic.slug}`}
+      className="group block"
+      onMouseEnter={() => onHover?.(clinic.slug)}
+      onMouseLeave={() => onHover?.(null)}
+    >
       <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-stone-100">
         <Image
           src={clinic.image}
@@ -14,6 +30,22 @@ export default function ClinicCard({ clinic }: { clinic: Clinic }) {
           sizes="(max-width: 768px) 100vw, 33vw"
           className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
         />
+        <button
+          type="button"
+          aria-label={saved ? "Remove from saved" : "Save clinic"}
+          aria-pressed={saved}
+          onClick={(e) => {
+            e.preventDefault();
+            setSaved((v) => !v);
+          }}
+          className="absolute right-3 top-3 flex size-9 items-center justify-center rounded-full bg-white/90 shadow-sm backdrop-blur-sm transition-all hover:scale-110 active:scale-95"
+        >
+          <Heart
+            size={17}
+            weight={saved ? "fill" : "bold"}
+            className={saved ? "text-brand" : "text-ink"}
+          />
+        </button>
       </div>
       <div className="mt-3 flex items-start justify-between gap-3">
         <div>
@@ -29,6 +61,7 @@ export default function ClinicCard({ clinic }: { clinic: Clinic }) {
           <span className="flex shrink-0 items-center gap-1 text-[14px] font-semibold">
             <Star size={14} weight="fill" className="text-brand" />
             {clinic.rating.toFixed(1)}
+            <span className="font-normal text-stone-400">({clinic.reviews})</span>
           </span>
         )}
       </div>

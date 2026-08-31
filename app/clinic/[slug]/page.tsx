@@ -5,6 +5,7 @@ import { Star, MapPin, Phone, SealCheck } from "@phosphor-icons/react/dist/ssr";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
+import MiniMap from "@/components/MiniMap";
 import { clinics, reviews } from "@/lib/data";
 
 export function generateStaticParams() {
@@ -159,6 +160,18 @@ export default async function ClinicPage({
                       {clinic.phone}
                     </p>
                   )}
+                  <MiniMap
+                    marker={{
+                      slug: clinic.slug,
+                      name: clinic.name,
+                      city: clinic.city,
+                      lng: clinic.lng,
+                      lat: clinic.lat,
+                      rating: clinic.rating,
+                      reviews: clinic.reviews,
+                      image: clinic.image,
+                    }}
+                  />
                 </div>
               </div>
             </Reveal>
