@@ -1,13 +1,21 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Star, MapPin, Phone } from "@phosphor-icons/react/dist/ssr";
+import {
+  Star,
+  MapPin,
+  Phone,
+  SealCheck,
+  ClockCountdown,
+  ChatsCircle,
+} from "@phosphor-icons/react/dist/ssr";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
-import MiniMap from "@/components/MiniMap";
 import HoursCard from "@/components/HoursCard";
 import ReviewsSection from "@/components/ReviewsSection";
+import GalleryModal from "@/components/GalleryModal";
+import LocationMap from "@/components/LocationMap";
 import { clinics, reviews } from "@/lib/data";
 
 export function generateStaticParams() {
@@ -25,6 +33,34 @@ export default async function ClinicPage({
 
   const gallery = clinic.gallery ?? [clinic.image];
   const clinicReviews = reviews.filter((r) => r.clinic === clinic.slug);
+  const marker = {
+    slug: clinic.slug,
+    name: clinic.name,
+    city: clinic.city,
+    lng: clinic.lng,
+    lat: clinic.lat,
+    rating: clinic.rating,
+    reviews: clinic.reviews,
+    image: clinic.image,
+  };
+
+  const highlights = [
+    {
+      icon: SealCheck,
+      title: "Verified reviews only",
+      body: "Every review is checked by a person, and clinics can never delete them.",
+    },
+    {
+      icon: ClockCountdown,
+      title: "Confirmed within 24 hours",
+      body: "Request a time and our team confirms it with the clinic, usually same day.",
+    },
+    {
+      icon: ChatsCircle,
+      title: "No account needed",
+      body: "Book as a guest. You only sign in at the last step.",
+    },
+  ];
 
   return (
     <>
@@ -50,60 +86,87 @@ export default async function ClinicPage({
           </div>
         </Reveal>
 
-        {/* Gallery mosaic */}
+        {/* Gallery mosaic with full gallery view */}
         <Reveal className="mt-6">
-          <div className="grid h-[320px] grid-cols-2 gap-2 overflow-hidden rounded-3xl md:h-[440px] md:grid-cols-4">
-            <div className="relative col-span-2 row-span-2">
-              <Image
-                src={gallery[0]}
-                alt={`${clinic.name} interior`}
-                fill
-                priority
-                sizes="(max-width: 768px) 100vw, 50vw"
-                className="object-cover transition-transform duration-500 hover:scale-[1.02]"
-              />
-            </div>
-            {gallery.slice(1, 5).map((src, i) => (
-              <div key={i} className="relative hidden md:block">
+          <div className="relative">
+            <div className="grid h-[320px] grid-cols-2 gap-2 overflow-hidden rounded-3xl md:h-[440px] md:grid-cols-4">
+              <div className="relative col-span-2 row-span-2">
                 <Image
-                  src={src}
-                  alt={`${clinic.name} photo ${i + 2}`}
+                  src={gallery[0]}
+                  alt={`${clinic.name} interior`}
                   fill
-                  sizes="25vw"
-                  className="object-cover transition-transform duration-500 hover:scale-[1.03]"
+                  priority
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className="object-cover transition-transform duration-500 hover:scale-[1.02]"
                 />
               </div>
-            ))}
+              {gallery.slice(1, 5).map((src, i) => (
+                <div key={i} className="relative hidden md:block">
+                  <Image
+                    src={src}
+                    alt={`${clinic.name} photo ${i + 2}`}
+                    fill
+                    sizes="25vw"
+                    className="object-cover transition-transform duration-500 hover:scale-[1.03]"
+                  />
+                </div>
+              ))}
+            </div>
+            <GalleryModal photos={gallery} clinicName={clinic.name} />
           </div>
         </Reveal>
 
-        <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_380px]">
+        <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_380px] lg:gap-16">
           <div>
+            {/* About */}
             <Reveal>
-              <p className="max-w-[62ch] text-[16px] leading-relaxed text-stone-600">
-                {clinic.about}
-              </p>
+              <section className="border-b border-stone-100 pb-8">
+                <p className="max-w-[62ch] text-[16px] leading-relaxed text-stone-600">
+                  {clinic.about}
+                </p>
+              </section>
             </Reveal>
 
-            <Reveal className="mt-10">
-              <h2 className="font-display text-xl font-extrabold tracking-tight">
-                Services
-              </h2>
-              <ul className="mt-4 divide-y divide-stone-100">
-                {clinic.services.map((s) => (
-                  <li key={s} className="flex items-center justify-between py-4">
-                    <span className="text-[15px] font-semibold">{s}</span>
-                    <Link
-                      href={`/book/${clinic.slug}?service=${encodeURIComponent(s)}`}
-                      className="rounded-full border border-stone-300 px-4 py-2 text-[13.5px] font-bold transition-all hover:border-brand hover:text-brand-text active:scale-[0.97]"
-                    >
-                      Request to book
-                    </Link>
-                  </li>
+            {/* Highlights */}
+            <Reveal>
+              <section className="space-y-5 border-b border-stone-100 py-8">
+                {highlights.map((h) => (
+                  <div key={h.title} className="flex gap-4">
+                    <h.icon size={26} className="mt-0.5 shrink-0 text-ink" />
+                    <div>
+                      <p className="text-[15px] font-bold">{h.title}</p>
+                      <p className="mt-0.5 max-w-[52ch] text-[14px] leading-relaxed text-stone-500">
+                        {h.body}
+                      </p>
+                    </div>
+                  </div>
                 ))}
-              </ul>
+              </section>
             </Reveal>
 
+            {/* Services */}
+            <Reveal>
+              <section className="border-b border-stone-100 py-8">
+                <h2 className="font-display text-xl font-extrabold tracking-tight">
+                  Services
+                </h2>
+                <ul className="mt-2 divide-y divide-stone-100">
+                  {clinic.services.map((s) => (
+                    <li key={s} className="flex items-center justify-between py-4">
+                      <span className="text-[15px] font-semibold">{s}</span>
+                      <Link
+                        href={`/book/${clinic.slug}?service=${encodeURIComponent(s)}`}
+                        className="rounded-full border border-stone-300 px-4 py-2 text-[13.5px] font-bold transition-all hover:border-brand hover:text-brand-text active:scale-[0.97]"
+                      >
+                        Request to book
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            </Reveal>
+
+            {/* Reviews */}
             <Reveal>
               <ReviewsSection
                 clinicSlug={clinic.slug}
@@ -154,23 +217,24 @@ export default async function ClinicPage({
                       {clinic.phone}
                     </p>
                   )}
-                  <MiniMap
-                    marker={{
-                      slug: clinic.slug,
-                      name: clinic.name,
-                      city: clinic.city,
-                      lng: clinic.lng,
-                      lat: clinic.lat,
-                      rating: clinic.rating,
-                      reviews: clinic.reviews,
-                      image: clinic.image,
-                    }}
-                  />
                 </div>
               </div>
             </Reveal>
           </div>
         </div>
+
+        {/* Location */}
+        <Reveal className="mt-4 border-t border-stone-100 pt-10">
+          <h2 className="font-display text-xl font-extrabold tracking-tight">
+            Where you will find us
+          </h2>
+          <p className="mt-1 text-[15px] text-stone-500">
+            {clinic.address ?? `${clinic.city}, Michigan`}
+          </p>
+          <div className="mt-5">
+            <LocationMap marker={marker} />
+          </div>
+        </Reveal>
 
         <Reveal className="mt-14">
           <Link

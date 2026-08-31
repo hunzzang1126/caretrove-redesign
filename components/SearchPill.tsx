@@ -2,7 +2,6 @@
 
 import { useRouter } from "next/navigation";
 import { createPortal } from "react-dom";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   MagnifyingGlass,
@@ -224,7 +223,6 @@ export default function SearchPill({
   defaultLocation?: string;
 }) {
   const router = useRouter();
-  const reduce = useReducedMotion();
   const formRef = useRef<HTMLFormElement>(null);
   const [q, setQ] = useState(defaultQuery);
   const [loc, setLoc] = useState(defaultLocation);
@@ -349,14 +347,7 @@ export default function SearchPill({
     : "Add date";
 
   const sheetInner = (
-    <motion.div
-      key="search-sheet"
-      initial={reduce ? false : { y: "100%" }}
-      animate={{ y: 0 }}
-      exit={reduce ? undefined : { y: "100%" }}
-      transition={{ duration: 0.32, ease: [0.32, 0.72, 0, 1] }}
-      className="fixed inset-0 z-50 flex flex-col bg-white pt-[env(safe-area-inset-top)] md:hidden"
-    >
+    <div className="fixed inset-0 z-50 flex flex-col bg-white pt-[env(safe-area-inset-top)] md:hidden">
       <div className="flex items-center justify-between border-b border-stone-100 px-5 py-4">
         <p className="font-display text-lg font-extrabold tracking-tight">
           Search CareTrove
@@ -546,15 +537,11 @@ export default function SearchPill({
           Search
         </button>
       </div>
-    </motion.div>
+    </div>
   );
 
-  const sheetNode = mounted
-    ? createPortal(
-        <AnimatePresence>{sheet && sheetInner}</AnimatePresence>,
-        document.body
-      )
-    : null;
+  const sheetNode =
+    mounted && sheet ? createPortal(sheetInner, document.body) : null;
 
   if (compact) {
     return (
