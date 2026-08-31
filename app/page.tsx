@@ -6,7 +6,7 @@ import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
 import SearchPill from "@/components/SearchPill";
 import HeroTitle from "@/components/HeroTitle";
-import HeroPhotos, { MobilePhotoStrip } from "@/components/HeroPhotos";
+import HeroPhotos from "@/components/HeroPhotos";
 import ClinicCard from "@/components/ClinicCard";
 import MichiganMap from "@/components/MichiganMap";
 import { categories, cities, clinics, providerBandImage } from "@/lib/data";
@@ -38,15 +38,12 @@ export default function Home() {
                 <Link
                   key={t}
                   href={`/search?q=${encodeURIComponent(t)}`}
-                  className="rounded-full border border-stone-200 bg-white px-4 py-2 text-[13.5px] font-semibold text-stone-700 shadow-sm transition-all hover:border-brand hover:text-brand-text active:scale-[0.98]"
+                  className="glass-tint relative isolate rounded-full px-4 py-2 text-[13.5px] font-semibold text-stone-700 transition-all hover:scale-[1.04] hover:text-brand-text active:scale-[0.98]"
                 >
                   {t}
                 </Link>
               ))}
             </div>
-          </Reveal>
-          <Reveal delay={0.5} className="w-full">
-            <MobilePhotoStrip />
           </Reveal>
         </div>
         <div id="hero-pill-sentinel" className="absolute bottom-0 h-px w-px" />

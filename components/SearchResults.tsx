@@ -45,14 +45,19 @@ export default function SearchResults({ clinics }: { clinics: Clinic[] }) {
   }
 
   return (
-    <div className="relative mt-6 lg:grid lg:grid-cols-[1fr_minmax(380px,42%)] lg:gap-8">
+    <div className="relative mt-6 lg:mt-0 lg:grid lg:grid-cols-[1fr_minmax(340px,40%)] lg:gap-8">
       <div
         className={`grid gap-x-6 gap-y-10 pb-28 sm:grid-cols-2 lg:pb-16 ${
           mobileMap ? "hidden lg:grid" : ""
         }`}
       >
         {clinics.map((clinic) => (
-          <ClinicCard key={clinic.slug} clinic={clinic} onHover={setHovered} />
+          <ClinicCard
+            key={clinic.slug}
+            clinic={clinic}
+            onHover={setHovered}
+            showTags
+          />
         ))}
       </div>
 

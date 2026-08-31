@@ -10,10 +10,12 @@ export default function ClinicCard({
   clinic,
   onHover,
   variant = "list",
+  showTags = false,
 }: {
   clinic: Clinic;
   onHover?: (slug: string | null) => void;
   variant?: "list" | "glass";
+  showTags?: boolean;
 }) {
   const [saved, setSaved] = useState(false);
 
@@ -100,9 +102,22 @@ export default function ClinicCard({
           <p className="mt-0.5 text-[14px] text-stone-500">
             {clinic.city} · {clinic.category}
           </p>
-          <p className="mt-0.5 text-[14px] text-stone-500">
-            {clinic.services.slice(0, 2).join(", ")}
-          </p>
+          {showTags ? (
+            <span className="mt-2 flex flex-wrap gap-1.5">
+              {clinic.services.slice(0, 3).map((s) => (
+                <span
+                  key={s}
+                  className="rounded-md bg-stone-100 px-2 py-1 text-[12px] font-semibold text-stone-600"
+                >
+                  {s}
+                </span>
+              ))}
+            </span>
+          ) : (
+            <p className="mt-0.5 text-[14px] text-stone-500">
+              {clinic.services.slice(0, 2).join(", ")}
+            </p>
+          )}
         </div>
         {clinic.rating && (
           <span className="flex shrink-0 items-center gap-1 text-[14px] font-semibold">

@@ -16,7 +16,7 @@ export default function HeroTitle() {
       {WORDS.map((w, i) => (
         <motion.span
           key={w}
-          className="inline-block"
+          className="inline-block font-semibold text-stone-500"
           initial={reduce ? false : { opacity: 0, y: "0.6em" }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.65, delay: 0.1 + i * 0.07, ease: EASE }}
@@ -26,7 +26,7 @@ export default function HeroTitle() {
         </motion.span>
       ))}
       <motion.span
-        className="relative inline-block italic"
+        className="relative inline-block text-[1.08em] font-extrabold italic text-ink"
         initial={reduce ? false : { opacity: 0, y: "0.6em" }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.65, delay: 0.1 + WORDS.length * 0.07, ease: EASE }}
