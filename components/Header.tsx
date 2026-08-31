@@ -37,7 +37,7 @@ export default function Header({ pillOnScroll = false }: { pillOnScroll?: boolea
           aria-label="CareTrove home"
           className="col-start-1 justify-self-start"
         >
-          <Image src="/logo.svg" alt="CareTrove" width={160} height={38} priority />
+          <Image src="/logo.svg" alt="CareTrove" width={182} height={43} priority />
         </Link>
 
         <div
