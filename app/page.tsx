@@ -6,7 +6,7 @@ import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
 import SearchPill from "@/components/SearchPill";
 import HeroTitle from "@/components/HeroTitle";
-import HeroPhotos from "@/components/HeroPhotos";
+import HeroPhotos, { MobilePhotoStrip } from "@/components/HeroPhotos";
 import ClinicCard from "@/components/ClinicCard";
 import MichiganMap from "@/components/MichiganMap";
 import { categories, cities, clinics, providerBandImage } from "@/lib/data";
@@ -44,6 +44,9 @@ export default function Home() {
                 </Link>
               ))}
             </div>
+          </Reveal>
+          <Reveal delay={0.5} className="w-full">
+            <MobilePhotoStrip />
           </Reveal>
         </div>
         <div id="hero-pill-sentinel" className="absolute bottom-0 h-px w-px" />
