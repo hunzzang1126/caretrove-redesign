@@ -30,21 +30,6 @@ function slotsFor(clinic: Clinic, date: Date) {
   return out;
 }
 
-function StepHeading({ n, title, done }: { n: number; title: string; done: boolean }) {
-  return (
-    <h2 className="flex items-center gap-3 font-display text-lg font-extrabold tracking-tight">
-      <span
-        className={`flex size-7 items-center justify-center rounded-full text-[13px] transition-colors ${
-          done ? "bg-brand text-white" : "bg-stone-200 text-stone-500"
-        }`}
-      >
-        {n}
-      </span>
-      {title}
-    </h2>
-  );
-}
-
 export default function BookingFlow({
   clinic,
   preselectedService,
@@ -65,10 +50,7 @@ export default function BookingFlow({
   const [error, setError] = useState("");
   const [sent, setSent] = useState(false);
 
-  const slots = useMemo(
-    () => (date ? slotsFor(clinic, date) : []),
-    [clinic, date]
-  );
+  const slots = useMemo(() => (date ? slotsFor(clinic, date) : []), [clinic, date]);
 
   const dateLabel = date
     ? date.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })
@@ -102,33 +84,49 @@ export default function BookingFlow({
   }
 
   return (
-    <div className="grid gap-10 lg:grid-cols-[1fr_360px]">
-      <div className="space-y-10">
-        {/* Step 1: service */}
-        <section>
-          <StepHeading n={1} title="Choose a service" done={!!service} />
-          <div className="mt-4 grid gap-3 sm:grid-cols-2">
-            {clinic.services.map((s) => (
-              <button
-                key={s}
-                type="button"
-                onClick={() => setService(s)}
-                className={`rounded-2xl border px-5 py-4 text-left text-[15px] font-bold transition-all active:scale-[0.99] ${
-                  service === s
-                    ? "border-brand bg-brand/5 text-brand-text"
-                    : "border-stone-200 hover:border-stone-400"
-                }`}
-              >
-                {s}
-              </button>
-            ))}
+    <div className="grid gap-10 lg:grid-cols-[1fr_380px] lg:gap-16">
+      <div className="max-w-[560px]">
+        {/* Service */}
+        <section className="border-b border-stone-100 pb-8">
+          <h2 className="font-display text-xl font-extrabold tracking-tight">
+            Choose a service
+          </h2>
+          <div className="mt-2 divide-y divide-stone-100">
+            {clinic.services.map((s) => {
+              const active = service === s;
+              return (
+                <button
+                  key={s}
+                  type="button"
+                  onClick={() => setService(s)}
+                  className="group flex w-full items-center justify-between py-4 text-left"
+                >
+                  <span
+                    className={`text-[15.5px] transition-colors ${
+                      active ? "font-bold" : "font-semibold text-stone-600 group-hover:text-ink"
+                    }`}
+                  >
+                    {s}
+                  </span>
+                  <span
+                    className={`flex size-6 items-center justify-center rounded-full border-2 transition-colors ${
+                      active ? "border-ink" : "border-stone-300 group-hover:border-stone-500"
+                    }`}
+                  >
+                    {active && <span className="size-3 rounded-full bg-ink" />}
+                  </span>
+                </button>
+              );
+            })}
           </div>
         </section>
 
-        {/* Step 2: date */}
-        <section>
-          <StepHeading n={2} title="Pick a date" done={!!date} />
-          <div className="mt-4 max-w-[360px] rounded-2xl border border-stone-200 p-5">
+        {/* Date */}
+        <section className="border-b border-stone-100 py-8">
+          <h2 className="font-display text-xl font-extrabold tracking-tight">
+            Pick a date
+          </h2>
+          <div className="mt-5 max-w-[360px]">
             <MonthCalendar
               value={date}
               onSelect={(d) => {
@@ -139,17 +137,19 @@ export default function BookingFlow({
           </div>
         </section>
 
-        {/* Step 3: time */}
-        <section>
-          <StepHeading n={3} title="Pick a time" done={!!time} />
+        {/* Time */}
+        <section className="border-b border-stone-100 py-8">
+          <h2 className="font-display text-xl font-extrabold tracking-tight">
+            Pick a time
+          </h2>
           {!date ? (
-            <p className="mt-4 text-[14.5px] text-stone-400">Pick a date first.</p>
+            <p className="mt-3 text-[14.5px] text-stone-400">Pick a date first.</p>
           ) : slots.length === 0 ? (
-            <p className="mt-4 text-[14.5px] text-stone-500">
+            <p className="mt-3 text-[14.5px] text-stone-500">
               The clinic is closed that day. Try another date.
             </p>
           ) : (
-            <div className="mt-4 flex max-w-[560px] flex-wrap gap-2.5">
+            <div className="mt-5 flex flex-wrap gap-2.5">
               {slots.map((s) => (
                 <button
                   key={s.label}
@@ -158,7 +158,7 @@ export default function BookingFlow({
                   onClick={() => setTime(s.label)}
                   className={`rounded-full border px-4 py-2 text-[13.5px] font-semibold tabular-nums transition-all active:scale-[0.97] ${
                     time === s.label
-                      ? "border-brand bg-brand text-white"
+                      ? "border-ink bg-ink text-white"
                       : s.taken
                         ? "border-stone-100 text-stone-300 line-through"
                         : "border-stone-300 hover:border-ink"
@@ -171,10 +171,12 @@ export default function BookingFlow({
           )}
         </section>
 
-        {/* Step 4: details */}
-        <section>
-          <StepHeading n={4} title="Your details" done={!!name && !!contact} />
-          <div className="mt-4 grid max-w-[560px] gap-3 sm:grid-cols-2">
+        {/* Details */}
+        <section className="py-8">
+          <h2 className="font-display text-xl font-extrabold tracking-tight">
+            Your details
+          </h2>
+          <div className="mt-5 grid gap-3 sm:grid-cols-2">
             <label className="block">
               <span className="text-[13px] font-bold text-stone-600">Name</span>
               <input
@@ -245,7 +247,7 @@ export default function BookingFlow({
               setError("");
               setSent(true);
             }}
-            className="mt-5 w-full rounded-xl bg-brand py-3.5 text-[15px] font-bold text-white transition-all hover:bg-brand-deep active:scale-[0.99]"
+            className="mt-5 w-full rounded-xl bg-brand py-3.5 text-[16px] font-bold text-white transition-all hover:bg-brand-deep active:scale-[0.99]"
           >
             Request this time
           </button>

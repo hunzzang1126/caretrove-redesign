@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { createPortal } from "react-dom";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   MagnifyingGlass,
@@ -38,22 +39,16 @@ type Item =
 
 function buildQueryItems(query: string): Item[] {
   const q = query.trim().toLowerCase();
-  const treatments = (
-    q ? TREATMENTS.filter((t) => t.label.toLowerCase().includes(q)) : TREATMENTS
-  )
+  if (!q) return [];
+  const treatments = TREATMENTS.filter((t) => t.label.toLowerCase().includes(q))
     .slice(0, 5)
     .map<Item>((t) => ({
       kind: "treatment",
       label: t.label,
       meta: `${t.count} ${t.count === 1 ? "clinic" : "clinics"}`,
     }));
-  const clinicMatches = (
-    q
-      ? CLINIC_ITEMS.filter(
-          (c) =>
-            c.label.toLowerCase().includes(q) || c.city.toLowerCase().includes(q)
-        )
-      : [...CLINIC_ITEMS].sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0))
+  const clinicMatches = CLINIC_ITEMS.filter(
+    (c) => c.label.toLowerCase().includes(q) || c.city.toLowerCase().includes(q)
   )
     .slice(0, 3)
     .map<Item>((c) => ({
@@ -67,7 +62,8 @@ function buildQueryItems(query: string): Item[] {
 
 function buildLocItems(query: string): Item[] {
   const q = query.trim().toLowerCase();
-  return (q ? cities.filter((c) => c.name.toLowerCase().includes(q)) : cities)
+  if (!q) return [];
+  return cities.filter((c) => c.name.toLowerCase().includes(q))
     .slice(0, 6)
     .map<Item>((c) => ({
       kind: "city",
@@ -228,6 +224,7 @@ export default function SearchPill({
   defaultLocation?: string;
 }) {
   const router = useRouter();
+  const reduce = useReducedMotion();
   const formRef = useRef<HTMLFormElement>(null);
   const [q, setQ] = useState(defaultQuery);
   const [loc, setLoc] = useState(defaultLocation);
@@ -351,8 +348,15 @@ export default function SearchPill({
     ? date.toLocaleDateString("en-US", { month: "short", day: "numeric" })
     : "Add date";
 
-  const sheetInner = sheet ? (
-    <div className="fixed inset-0 z-50 flex flex-col bg-white md:hidden">
+  const sheetInner = (
+    <motion.div
+      key="search-sheet"
+      initial={reduce ? false : { y: "100%" }}
+      animate={{ y: 0 }}
+      exit={reduce ? undefined : { y: "100%" }}
+      transition={{ duration: 0.32, ease: [0.32, 0.72, 0, 1] }}
+      className="fixed inset-0 z-50 flex flex-col bg-white pt-[env(safe-area-inset-top)] md:hidden"
+    >
       <div className="flex items-center justify-between border-b border-stone-100 px-5 py-4">
         <p className="font-display text-lg font-extrabold tracking-tight">
           Search CareTrove
@@ -368,11 +372,19 @@ export default function SearchPill({
       </div>
 
       <div className="flex-1 space-y-3 overflow-y-auto px-5 py-4">
-        <div
-          className={`rounded-2xl border p-4 transition-colors ${
-            sheetField === "q" ? "border-ink shadow-sm" : "border-stone-200"
-          }`}
-        >
+        {sheetField !== "q" ? (
+          <button
+            type="button"
+            onClick={() => setSheetField("q")}
+            className="flex w-full items-center justify-between rounded-2xl border border-stone-200 p-4 text-left"
+          >
+            <span className="text-[13px] font-bold text-stone-500">Treatment</span>
+            <span className={`text-[14.5px] font-semibold ${q ? "" : "text-stone-400"}`}>
+              {q || "Add treatment"}
+            </span>
+          </button>
+        ) : (
+        <div className="rounded-2xl border border-ink p-4 shadow-sm">
           <label className="block">
             <span className="text-[11.5px] font-bold uppercase tracking-wide text-stone-500">
               Treatment
@@ -382,14 +394,21 @@ export default function SearchPill({
               <input
                 value={q}
                 autoFocus={sheetField === "q"}
+                enterKeyHint="search"
                 onChange={(e) => setQ(e.target.value)}
                 onFocus={() => setSheetField("q")}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    setSheet(false);
+                    submit();
+                  }
+                }}
                 placeholder="Botox, massage, facials"
                 className="w-full bg-transparent text-[16px] font-semibold outline-none placeholder:font-medium placeholder:text-stone-400"
               />
             </div>
           </label>
-          {sheetField === "q" && sheetItems.length > 0 && (
+          {sheetItems.length > 0 && (
             <div className="-mx-4 mt-2 border-t border-stone-100 pt-1">
               {sheetItems.map((item) => (
                 <ItemRow
@@ -402,12 +421,21 @@ export default function SearchPill({
             </div>
           )}
         </div>
+        )}
 
-        <div
-          className={`rounded-2xl border p-4 transition-colors ${
-            sheetField === "loc" ? "border-ink shadow-sm" : "border-stone-200"
-          }`}
-        >
+        {sheetField !== "loc" ? (
+          <button
+            type="button"
+            onClick={() => setSheetField("loc")}
+            className="flex w-full items-center justify-between rounded-2xl border border-stone-200 p-4 text-left"
+          >
+            <span className="text-[13px] font-bold text-stone-500">Where</span>
+            <span className={`text-[14.5px] font-semibold ${loc ? "" : "text-stone-400"}`}>
+              {loc || "Add location"}
+            </span>
+          </button>
+        ) : (
+        <div className="rounded-2xl border border-ink p-4 shadow-sm">
           <label className="block">
             <span className="text-[11.5px] font-bold uppercase tracking-wide text-stone-500">
               Where
@@ -417,14 +445,21 @@ export default function SearchPill({
               <input
                 value={loc}
                 autoFocus={sheetField === "loc"}
+                enterKeyHint="search"
                 onChange={(e) => setLoc(e.target.value)}
                 onFocus={() => setSheetField("loc")}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    setSheet(false);
+                    submit();
+                  }
+                }}
                 placeholder="City or ZIP in Michigan"
                 className="w-full bg-transparent text-[16px] font-semibold outline-none placeholder:font-medium placeholder:text-stone-400"
               />
             </div>
           </label>
-          {sheetField === "loc" && sheetItems.length > 0 && (
+          {sheetItems.length > 0 && (
             <div className="-mx-4 mt-2 border-t border-stone-100 pt-1">
               {sheetItems.map((item) => (
                 <ItemRow
@@ -437,12 +472,21 @@ export default function SearchPill({
             </div>
           )}
         </div>
+        )}
 
-        <div
-          className={`rounded-2xl border p-4 transition-colors ${
-            sheetField === "date" ? "border-ink shadow-sm" : "border-stone-200"
-          }`}
-        >
+        {sheetField !== "date" ? (
+          <button
+            type="button"
+            onClick={() => setSheetField("date")}
+            className="flex w-full items-center justify-between rounded-2xl border border-stone-200 p-4 text-left"
+          >
+            <span className="text-[13px] font-bold text-stone-500">When</span>
+            <span className={`text-[14.5px] font-semibold ${date ? "" : "text-stone-400"}`}>
+              {date ? dateLabel : "Add date"}
+            </span>
+          </button>
+        ) : (
+        <div className="rounded-2xl border border-ink p-4 shadow-sm">
           <button
             type="button"
             onClick={() =>
@@ -464,21 +508,20 @@ export default function SearchPill({
               </span>
             </span>
           </button>
-          {sheetField === "date" && (
-            <div className="mt-3 border-t border-stone-100 pt-3">
-              <MonthCalendar
-                value={date}
-                onSelect={(d) => {
-                  setDate(d);
-                  setSheetField(null);
-                }}
-              />
-            </div>
-          )}
+          <div className="mt-3 border-t border-stone-100 pt-3">
+            <MonthCalendar
+              value={date}
+              onSelect={(d) => {
+                setDate(d);
+                setSheetField(null);
+              }}
+            />
+          </div>
         </div>
+        )}
       </div>
 
-      <div className="flex items-center justify-between border-t border-stone-100 px-5 py-4">
+      <div className="flex items-center justify-between border-t border-stone-100 px-5 pt-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
         <button
           type="button"
           onClick={() => {
@@ -503,11 +546,15 @@ export default function SearchPill({
           Search
         </button>
       </div>
-    </div>
-  ) : null;
+    </motion.div>
+  );
 
-  const sheetNode =
-    mounted && sheetInner ? createPortal(sheetInner, document.body) : null;
+  const sheetNode = mounted
+    ? createPortal(
+        <AnimatePresence>{sheet && sheetInner}</AnimatePresence>,
+        document.body
+      )
+    : null;
 
   if (compact) {
     return (
