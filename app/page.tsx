@@ -66,15 +66,14 @@ export default function Home() {
             </Link>
           </div>
         </Reveal>
-        <div className="scrollbar-none -mx-5 mt-6 flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-pl-5 px-5 pb-2 sm:mx-0 sm:mt-8 sm:grid sm:snap-none sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3">
-          {clinics.map((clinic, i) => (
-            <Reveal
+        <Reveal className="scrollbar-none -mx-5 mt-6 flex snap-x snap-proximity gap-4 overflow-x-auto overscroll-x-contain scroll-pl-5 px-5 pb-2 sm:mx-0 sm:mt-8 sm:grid sm:snap-none sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3">
+          {clinics.map((clinic) => (
+            <div
               key={clinic.slug}
-              delay={(i % 3) * 0.06}
               className="w-[80%] shrink-0 snap-start sm:w-auto sm:shrink"
             >
               <ClinicCard clinic={clinic} />
-            </Reveal>
+            </div>
           ))}
           <Link
             href="/search"
@@ -85,7 +84,7 @@ export default function Home() {
             </span>
             <span className="text-[14px] font-bold">View all clinics</span>
           </Link>
-        </div>
+        </Reveal>
       </section>
 
       {/* Treatments */}
@@ -95,9 +94,9 @@ export default function Home() {
             Browse by treatment
           </h2>
         </Reveal>
-        <div className="scrollbar-none mt-8 flex snap-x gap-5 overflow-x-auto pb-2 md:grid md:grid-cols-4 md:overflow-visible">
-          {categories.map((c, i) => (
-            <Reveal key={c.slug} delay={i * 0.06} className="min-w-[240px] snap-start md:min-w-0">
+        <Reveal className="scrollbar-none mt-8 flex snap-x snap-proximity gap-5 overflow-x-auto overscroll-x-contain pb-2 md:grid md:grid-cols-4 md:overflow-visible">
+          {categories.map((c) => (
+            <div key={c.slug} className="min-w-[240px] snap-start md:min-w-0">
               <Link href={`/search?category=${c.slug}`} className="group block">
                 <div className="ring-shimmer relative aspect-[5/4] overflow-hidden rounded-2xl bg-stone-100">
                   <Image
@@ -112,9 +111,9 @@ export default function Home() {
                 <h3 className="mt-3 text-[16px] font-bold">{c.name}</h3>
                 <p className="text-[14px] text-stone-500">{c.blurb}</p>
               </Link>
-            </Reveal>
+            </div>
           ))}
-        </div>
+        </Reveal>
       </section>
 
       {/* Browse by city */}

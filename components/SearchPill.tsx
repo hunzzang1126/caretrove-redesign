@@ -9,6 +9,7 @@ import {
   Storefront,
   Sparkle,
   Star,
+  X,
 } from "@phosphor-icons/react";
 import MonthCalendar from "@/components/Calendar";
 import { clinics, cities } from "@/lib/data";
@@ -74,6 +75,57 @@ function buildLocItems(query: string): Item[] {
     }));
 }
 
+function ItemRow({
+  item,
+  active = false,
+  onPick,
+}: {
+  item: Item;
+  active?: boolean;
+  onPick: (item: Item) => void;
+}) {
+  return (
+    <button
+      type="button"
+      role="option"
+      aria-selected={active}
+      onPointerDown={(e) => {
+        e.preventDefault();
+        onPick(item);
+      }}
+      className={`flex w-full items-center gap-3 px-4 py-2.5 text-left transition-colors ${
+        active ? "bg-stone-50" : "hover:bg-stone-50"
+      }`}
+    >
+      <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-stone-100 text-stone-500">
+        {item.kind === "treatment" ? (
+          <Sparkle size={15} />
+        ) : item.kind === "clinic" ? (
+          <Storefront size={15} />
+        ) : (
+          <MapPin size={15} />
+        )}
+      </span>
+      <span className="min-w-0">
+        <span className="block truncate text-[14.5px] font-semibold">
+          {item.label}
+        </span>
+        <span className="flex items-center gap-0.5 text-[12.5px] text-stone-400">
+          {item.meta.includes("★") ? (
+            <>
+              {item.meta.split("★")[0]}
+              <Star size={11} weight="fill" className="text-brand" />
+              {item.meta.split("★")[1]}
+            </>
+          ) : (
+            item.meta
+          )}
+        </span>
+      </span>
+    </button>
+  );
+}
+
 function SuggestionList({
   items,
   highlight,
@@ -109,44 +161,7 @@ function SuggestionList({
                 {header}
               </p>
             )}
-            <button
-              type="button"
-              role="option"
-              aria-selected={i === highlight}
-              onPointerDown={(e) => {
-                e.preventDefault();
-                onPick(item);
-              }}
-              className={`flex w-full items-center gap-3 px-4 py-2.5 text-left transition-colors ${
-                i === highlight ? "bg-stone-50" : "hover:bg-stone-50"
-              }`}
-            >
-              <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-stone-100 text-stone-500">
-                {item.kind === "treatment" ? (
-                  <Sparkle size={15} />
-                ) : item.kind === "clinic" ? (
-                  <Storefront size={15} />
-                ) : (
-                  <MapPin size={15} />
-                )}
-              </span>
-              <span className="min-w-0">
-                <span className="block truncate text-[14.5px] font-semibold">
-                  {item.label}
-                </span>
-                <span className="block flex items-center gap-0.5 text-[12.5px] text-stone-400">
-                  {item.meta.includes("★") ? (
-                    <>
-                      {item.meta.split("★")[0]}
-                      <Star size={11} weight="fill" className="text-brand" />
-                      {item.meta.split("★")[1]}
-                    </>
-                  ) : (
-                    item.meta
-                  )}
-                </span>
-              </span>
-            </button>
+            <ItemRow item={item} active={i === highlight} onPick={onPick} />
           </div>
         );
       })}
@@ -190,6 +205,9 @@ function DatePopover({
   );
 }
 
+const isMobileViewport = () =>
+  typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches;
+
 export default function SearchPill({
   compact = false,
   defaultQuery = "",
@@ -207,6 +225,9 @@ export default function SearchPill({
   const [calOpen, setCalOpen] = useState(false);
   const [openList, setOpenList] = useState<"q" | "loc" | null>(null);
   const [hi, setHi] = useState(-1);
+  /* Mobile: a full-screen search sheet replaces inline dropdowns */
+  const [sheet, setSheet] = useState(false);
+  const [sheetField, setSheetField] = useState<"q" | "loc" | "date" | null>("q");
 
   const items = useMemo(
     () =>
@@ -216,6 +237,16 @@ export default function SearchPill({
           ? buildLocItems(loc)
           : [],
     [openList, q, loc]
+  );
+
+  const sheetItems = useMemo(
+    () =>
+      sheetField === "q"
+        ? buildQueryItems(q)
+        : sheetField === "loc"
+          ? buildLocItems(loc)
+          : [],
+    [sheetField, q, loc]
   );
 
   useEffect(() => {
@@ -228,6 +259,19 @@ export default function SearchPill({
     document.addEventListener("pointerdown", onDown);
     return () => document.removeEventListener("pointerdown", onDown);
   }, []);
+
+  useEffect(() => {
+    if (!sheet) return;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSheet(false);
+    };
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = "";
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [sheet]);
 
   const submit = () => {
     const p = new URLSearchParams();
@@ -244,6 +288,7 @@ export default function SearchPill({
 
   const pick = (item: Item) => {
     if (item.kind === "clinic" && "slug" in item) {
+      setSheet(false);
       router.push(`/clinic/${item.slug}`);
       return;
     }
@@ -252,6 +297,34 @@ export default function SearchPill({
     setOpenList(null);
     setHi(-1);
   };
+
+  const sheetPick = (item: Item) => {
+    if (item.kind === "clinic" && "slug" in item) {
+      setSheet(false);
+      router.push(`/clinic/${item.slug}`);
+      return;
+    }
+    if (item.kind === "city") {
+      setLoc(item.label);
+      setSheetField("date");
+    } else {
+      setQ(item.label);
+      setSheetField("loc");
+    }
+  };
+
+  const openSheet = (field: "q" | "loc" | "date") => {
+    setSheetField(field);
+    setSheet(true);
+  };
+
+  const interceptMobile =
+    (field: "q" | "loc" | "date") => (e: React.PointerEvent) => {
+      if (isMobileViewport()) {
+        e.preventDefault();
+        openSheet(field);
+      }
+    };
 
   const listKeys = (e: React.KeyboardEvent) => {
     if (!openList || items.length === 0) return;
@@ -274,95 +347,170 @@ export default function SearchPill({
     ? date.toLocaleDateString("en-US", { month: "short", day: "numeric" })
     : "Add date";
 
+  const sheetNode = sheet ? (
+    <div className="fixed inset-0 z-50 flex flex-col bg-white md:hidden">
+      <div className="flex items-center justify-between border-b border-stone-100 px-5 py-4">
+        <p className="font-display text-lg font-extrabold tracking-tight">
+          Search CareTrove
+        </p>
+        <button
+          type="button"
+          aria-label="Close search"
+          onClick={() => setSheet(false)}
+          className="flex size-9 items-center justify-center rounded-full transition-colors hover:bg-stone-100"
+        >
+          <X size={18} />
+        </button>
+      </div>
+
+      <div className="flex-1 space-y-3 overflow-y-auto px-5 py-4">
+        <div
+          className={`rounded-2xl border p-4 transition-colors ${
+            sheetField === "q" ? "border-ink shadow-sm" : "border-stone-200"
+          }`}
+        >
+          <label className="block">
+            <span className="text-[11.5px] font-bold uppercase tracking-wide text-stone-500">
+              Treatment
+            </span>
+            <div className="mt-1 flex items-center gap-2.5">
+              <MagnifyingGlass size={17} className="shrink-0 text-stone-400" />
+              <input
+                value={q}
+                autoFocus={sheetField === "q"}
+                onChange={(e) => setQ(e.target.value)}
+                onFocus={() => setSheetField("q")}
+                placeholder="Botox, massage, facials"
+                className="w-full bg-transparent text-[16px] font-semibold outline-none placeholder:font-medium placeholder:text-stone-400"
+              />
+            </div>
+          </label>
+          {sheetField === "q" && sheetItems.length > 0 && (
+            <div className="-mx-4 mt-2 border-t border-stone-100 pt-1">
+              {sheetItems.map((item) => (
+                <ItemRow
+                  key={`${item.kind}-${item.label}`}
+                  item={item}
+                  onPick={sheetPick}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div
+          className={`rounded-2xl border p-4 transition-colors ${
+            sheetField === "loc" ? "border-ink shadow-sm" : "border-stone-200"
+          }`}
+        >
+          <label className="block">
+            <span className="text-[11.5px] font-bold uppercase tracking-wide text-stone-500">
+              Where
+            </span>
+            <div className="mt-1 flex items-center gap-2.5">
+              <MapPin size={17} className="shrink-0 text-stone-400" />
+              <input
+                value={loc}
+                autoFocus={sheetField === "loc"}
+                onChange={(e) => setLoc(e.target.value)}
+                onFocus={() => setSheetField("loc")}
+                placeholder="City or ZIP in Michigan"
+                className="w-full bg-transparent text-[16px] font-semibold outline-none placeholder:font-medium placeholder:text-stone-400"
+              />
+            </div>
+          </label>
+          {sheetField === "loc" && sheetItems.length > 0 && (
+            <div className="-mx-4 mt-2 border-t border-stone-100 pt-1">
+              {sheetItems.map((item) => (
+                <ItemRow
+                  key={`${item.kind}-${item.label}`}
+                  item={item}
+                  onPick={sheetPick}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div
+          className={`rounded-2xl border p-4 transition-colors ${
+            sheetField === "date" ? "border-ink shadow-sm" : "border-stone-200"
+          }`}
+        >
+          <button
+            type="button"
+            onClick={() =>
+              setSheetField(sheetField === "date" ? null : "date")
+            }
+            className="flex w-full items-center justify-between text-left"
+          >
+            <span>
+              <span className="text-[11.5px] font-bold uppercase tracking-wide text-stone-500">
+                When
+              </span>
+              <span className="mt-1 flex items-center gap-2.5">
+                <CalendarBlank size={17} className="shrink-0 text-stone-400" />
+                <span
+                  className={`text-[16px] font-semibold ${date ? "" : "font-medium text-stone-400"}`}
+                >
+                  {dateLabel}
+                </span>
+              </span>
+            </span>
+          </button>
+          {sheetField === "date" && (
+            <div className="mt-3 border-t border-stone-100 pt-3">
+              <MonthCalendar
+                value={date}
+                onSelect={(d) => {
+                  setDate(d);
+                  setSheetField(null);
+                }}
+              />
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="flex items-center justify-between border-t border-stone-100 px-5 py-4">
+        <button
+          type="button"
+          onClick={() => {
+            setQ("");
+            setLoc("");
+            setDate(null);
+            setSheetField("q");
+          }}
+          className="text-[15px] font-bold underline underline-offset-2"
+        >
+          Clear all
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            setSheet(false);
+            submit();
+          }}
+          className="flex items-center gap-2 rounded-xl bg-brand px-7 py-3.5 text-[15px] font-bold text-white transition-all hover:bg-brand-deep active:scale-[0.98]"
+        >
+          <MagnifyingGlass size={16} weight="bold" />
+          Search
+        </button>
+      </div>
+    </div>
+  ) : null;
+
   if (compact) {
     return (
-      <form
-        ref={formRef}
-        onSubmit={(e) => {
-          e.preventDefault();
-          submit();
-        }}
-        className="relative mx-auto flex h-12 items-center rounded-full border border-stone-200 bg-white pl-5 pr-1.5 shadow-[0_6px_20px_-8px_rgba(28,25,23,0.25)] transition-shadow hover:shadow-[0_10px_28px_-8px_rgba(28,25,23,0.3)]"
-      >
-        <input
-          value={q}
-          role="combobox"
-          aria-expanded={openList === "q" && items.length > 0}
-          aria-autocomplete="list"
-          onChange={(e) => {
-            setQ(e.target.value);
-            setOpenList("q");
-            setHi(-1);
+      <>
+        <form
+          ref={formRef}
+          onSubmit={(e) => {
+            e.preventDefault();
+            submit();
           }}
-          onFocus={() => {
-            setOpenList("q");
-            setHi(-1);
-          }}
-          onKeyDown={listKeys}
-          placeholder="Treatment"
-          className="w-[120px] bg-transparent text-[13.5px] font-semibold outline-none placeholder:font-medium placeholder:text-stone-500"
-        />
-        <span className="mx-3 h-6 w-px bg-stone-200" />
-        <input
-          value={loc}
-          role="combobox"
-          aria-expanded={openList === "loc" && items.length > 0}
-          aria-autocomplete="list"
-          onChange={(e) => {
-            setLoc(e.target.value);
-            setOpenList("loc");
-            setHi(-1);
-          }}
-          onFocus={() => {
-            setOpenList("loc");
-            setHi(-1);
-          }}
-          onKeyDown={listKeys}
-          placeholder="City or ZIP"
-          className="w-[92px] bg-transparent text-[13.5px] font-semibold outline-none placeholder:font-medium placeholder:text-stone-500"
-        />
-        <button
-          type="submit"
-          aria-label="Search"
-          className="ml-2 flex size-9 items-center justify-center rounded-full bg-brand text-white transition-all hover:bg-brand-deep active:scale-95"
+          className="relative mx-auto hidden h-12 items-center rounded-full border border-stone-200 bg-white pl-5 pr-1.5 shadow-[0_6px_20px_-8px_rgba(28,25,23,0.25)] transition-shadow hover:shadow-[0_10px_28px_-8px_rgba(28,25,23,0.3)] md:flex"
         >
-          <MagnifyingGlass size={15} weight="bold" />
-        </button>
-        {openList === "q" && (
-          <SuggestionList
-            items={items}
-            highlight={hi}
-            onPick={pick}
-            className="left-0 top-[calc(100%+10px)] w-[340px]"
-          />
-        )}
-        {openList === "loc" && (
-          <SuggestionList
-            items={items}
-            highlight={hi}
-            onPick={pick}
-            className="left-[120px] top-[calc(100%+10px)] w-[300px]"
-          />
-        )}
-      </form>
-    );
-  }
-
-  return (
-    <form
-      ref={formRef}
-      onSubmit={(e) => {
-        e.preventDefault();
-        submit();
-      }}
-      className="relative mx-auto flex w-full max-w-[780px] flex-col rounded-3xl border border-stone-200 bg-white shadow-[0_18px_50px_-16px_rgba(28,25,23,0.28)] transition-shadow hover:shadow-[0_24px_60px_-16px_rgba(28,25,23,0.34)] md:h-[72px] md:flex-row md:items-center md:rounded-full"
-    >
-      <label className="group relative flex flex-1 cursor-text items-center gap-3 rounded-t-3xl px-7 py-4 transition-colors hover:bg-stone-50 md:h-full md:rounded-full md:py-0">
-        <MagnifyingGlass size={19} className="shrink-0 text-stone-400" />
-        <span className="flex w-full flex-col">
-          <span className="text-[11.5px] font-bold uppercase tracking-wide text-stone-500">
-            Treatment
-          </span>
           <input
             value={q}
             role="combobox"
@@ -376,23 +524,12 @@ export default function SearchPill({
             onFocus={() => {
               setOpenList("q");
               setHi(-1);
-              setCalOpen(false);
             }}
             onKeyDown={listKeys}
-            placeholder="Botox, massage, facials"
-            className="w-full bg-transparent text-[15px] font-semibold outline-none placeholder:font-medium placeholder:text-stone-400"
+            placeholder="Treatment"
+            className="w-[120px] bg-transparent text-[13.5px] font-semibold outline-none placeholder:font-medium placeholder:text-stone-500"
           />
-        </span>
-      </label>
-
-      <span className="mx-7 h-px bg-stone-100 md:mx-0 md:h-9 md:w-px" />
-
-      <label className="group relative flex flex-1 cursor-text items-center gap-3 px-7 py-4 transition-colors hover:bg-stone-50 md:h-full md:rounded-full md:py-0">
-        <MapPin size={19} className="shrink-0 text-stone-400" />
-        <span className="flex w-full flex-col">
-          <span className="text-[11.5px] font-bold uppercase tracking-wide text-stone-500">
-            Where
-          </span>
+          <span className="mx-3 h-6 w-px bg-stone-200" />
           <input
             value={loc}
             role="combobox"
@@ -406,74 +543,187 @@ export default function SearchPill({
             onFocus={() => {
               setOpenList("loc");
               setHi(-1);
-              setCalOpen(false);
             }}
             onKeyDown={listKeys}
-            placeholder="City or ZIP in Michigan"
-            className="w-full bg-transparent text-[15px] font-semibold outline-none placeholder:font-medium placeholder:text-stone-400"
+            placeholder="City or ZIP"
+            className="w-[92px] bg-transparent text-[13.5px] font-semibold outline-none placeholder:font-medium placeholder:text-stone-500"
           />
-        </span>
-      </label>
+          <button
+            type="submit"
+            aria-label="Search"
+            className="ml-2 flex size-9 items-center justify-center rounded-full bg-brand text-white transition-all hover:bg-brand-deep active:scale-95"
+          >
+            <MagnifyingGlass size={15} weight="bold" />
+          </button>
+          {openList === "q" && (
+            <SuggestionList
+              items={items}
+              highlight={hi}
+              onPick={pick}
+              className="left-0 top-[calc(100%+10px)] w-[340px]"
+            />
+          )}
+          {openList === "loc" && (
+            <SuggestionList
+              items={items}
+              highlight={hi}
+              onPick={pick}
+              className="left-[120px] top-[calc(100%+10px)] w-[300px]"
+            />
+          )}
+        </form>
 
-      <span className="mx-7 h-px bg-stone-100 md:mx-0 md:h-9 md:w-px" />
-
-      <div className="relative flex items-center gap-3 rounded-b-3xl py-3 pl-7 pr-3 md:h-full md:rounded-full md:py-0">
+        {/* Mobile: the compact pill becomes a sheet launcher */}
         <button
           type="button"
-          onClick={() => {
-            setCalOpen((v) => !v);
-            setOpenList(null);
-          }}
-          className="flex items-center gap-3 rounded-full py-2 text-left transition-colors md:pr-2"
+          onClick={() => openSheet("q")}
+          className="flex h-11 items-center gap-2 rounded-full border border-stone-200 bg-white px-4 text-[14px] font-bold shadow-[0_6px_20px_-8px_rgba(28,25,23,0.25)] transition-all active:scale-[0.97] md:hidden"
         >
-          <CalendarBlank size={19} className="shrink-0 text-stone-400" />
-          <span className="flex flex-col">
-            <span className="text-[11.5px] font-bold uppercase tracking-wide text-stone-500">
-              When
-            </span>
-            <span
-              className={`text-[15px] font-semibold ${date ? "" : "font-medium text-stone-400"}`}
-            >
-              {dateLabel}
-            </span>
-          </span>
-        </button>
-        {calOpen && (
-          <DatePopover
-            value={date}
-            onSelect={(d) => {
-              setDate(d);
-              setCalOpen(false);
-            }}
-            onClose={() => setCalOpen(false)}
-          />
-        )}
-        <button
-          type="submit"
-          aria-label="Search"
-          className="ml-auto flex h-[52px] shrink-0 items-center gap-2 rounded-full bg-brand px-6 text-[15px] font-bold text-white transition-all hover:bg-brand-deep active:scale-[0.97] md:ml-2"
-        >
-          <MagnifyingGlass size={17} weight="bold" />
+          <MagnifyingGlass size={15} weight="bold" className="text-brand" />
           Search
         </button>
-      </div>
+        {sheetNode}
+      </>
+    );
+  }
 
-      {openList === "q" && (
-        <SuggestionList
-          items={items}
-          highlight={hi}
-          onPick={pick}
-          className="inset-x-3 top-[calc(100%+10px)] md:left-3 md:right-auto md:w-[360px]"
-        />
-      )}
-      {openList === "loc" && (
-        <SuggestionList
-          items={items}
-          highlight={hi}
-          onPick={pick}
-          className="inset-x-3 top-[calc(100%+10px)] md:left-[36%] md:right-auto md:w-[320px]"
-        />
-      )}
-    </form>
+  return (
+    <>
+      <form
+        ref={formRef}
+        onSubmit={(e) => {
+          e.preventDefault();
+          submit();
+        }}
+        className="relative mx-auto flex w-full max-w-[780px] flex-col rounded-3xl border border-stone-200 bg-white shadow-[0_18px_50px_-16px_rgba(28,25,23,0.28)] transition-shadow hover:shadow-[0_24px_60px_-16px_rgba(28,25,23,0.34)] md:h-[72px] md:flex-row md:items-center md:rounded-full"
+      >
+        <label
+          className="group relative flex flex-1 cursor-text items-center gap-3 rounded-t-3xl px-7 py-4 transition-colors hover:bg-stone-50 md:h-full md:rounded-full md:py-0"
+          onPointerDown={interceptMobile("q")}
+        >
+          <MagnifyingGlass size={19} className="shrink-0 text-stone-400" />
+          <span className="flex w-full flex-col">
+            <span className="text-[11.5px] font-bold uppercase tracking-wide text-stone-500">
+              Treatment
+            </span>
+            <input
+              value={q}
+              role="combobox"
+              aria-expanded={openList === "q" && items.length > 0}
+              aria-autocomplete="list"
+              onChange={(e) => {
+                setQ(e.target.value);
+                setOpenList("q");
+                setHi(-1);
+              }}
+              onFocus={() => {
+                setOpenList("q");
+                setHi(-1);
+                setCalOpen(false);
+              }}
+              onKeyDown={listKeys}
+              placeholder="Botox, massage, facials"
+              className="w-full bg-transparent text-[15px] font-semibold outline-none placeholder:font-medium placeholder:text-stone-400"
+            />
+          </span>
+        </label>
+
+        <span className="mx-7 h-px bg-stone-100 md:mx-0 md:h-9 md:w-px" />
+
+        <label
+          className="group relative flex flex-1 cursor-text items-center gap-3 px-7 py-4 transition-colors hover:bg-stone-50 md:h-full md:rounded-full md:py-0"
+          onPointerDown={interceptMobile("loc")}
+        >
+          <MapPin size={19} className="shrink-0 text-stone-400" />
+          <span className="flex w-full flex-col">
+            <span className="text-[11.5px] font-bold uppercase tracking-wide text-stone-500">
+              Where
+            </span>
+            <input
+              value={loc}
+              role="combobox"
+              aria-expanded={openList === "loc" && items.length > 0}
+              aria-autocomplete="list"
+              onChange={(e) => {
+                setLoc(e.target.value);
+                setOpenList("loc");
+                setHi(-1);
+              }}
+              onFocus={() => {
+                setOpenList("loc");
+                setHi(-1);
+                setCalOpen(false);
+              }}
+              onKeyDown={listKeys}
+              placeholder="City or ZIP in Michigan"
+              className="w-full bg-transparent text-[15px] font-semibold outline-none placeholder:font-medium placeholder:text-stone-400"
+            />
+          </span>
+        </label>
+
+        <span className="mx-7 h-px bg-stone-100 md:mx-0 md:h-9 md:w-px" />
+
+        <div className="relative flex items-center gap-3 rounded-b-3xl py-3 pl-7 pr-3 md:h-full md:rounded-full md:py-0">
+          <button
+            type="button"
+            onPointerDown={interceptMobile("date")}
+            onClick={() => {
+              if (isMobileViewport()) return;
+              setCalOpen((v) => !v);
+              setOpenList(null);
+            }}
+            className="flex items-center gap-3 rounded-full py-2 text-left transition-colors md:pr-2"
+          >
+            <CalendarBlank size={19} className="shrink-0 text-stone-400" />
+            <span className="flex flex-col">
+              <span className="text-[11.5px] font-bold uppercase tracking-wide text-stone-500">
+                When
+              </span>
+              <span
+                className={`text-[15px] font-semibold ${date ? "" : "font-medium text-stone-400"}`}
+              >
+                {dateLabel}
+              </span>
+            </span>
+          </button>
+          {calOpen && (
+            <DatePopover
+              value={date}
+              onSelect={(d) => {
+                setDate(d);
+                setCalOpen(false);
+              }}
+              onClose={() => setCalOpen(false)}
+            />
+          )}
+          <button
+            type="submit"
+            aria-label="Search"
+            className="ml-auto flex h-[52px] shrink-0 items-center gap-2 rounded-full bg-brand px-6 text-[15px] font-bold text-white transition-all hover:bg-brand-deep active:scale-[0.97] md:ml-2"
+          >
+            <MagnifyingGlass size={17} weight="bold" />
+            Search
+          </button>
+        </div>
+
+        {openList === "q" && (
+          <SuggestionList
+            items={items}
+            highlight={hi}
+            onPick={pick}
+            className="inset-x-3 top-[calc(100%+10px)] hidden md:left-3 md:right-auto md:block md:w-[360px]"
+          />
+        )}
+        {openList === "loc" && (
+          <SuggestionList
+            items={items}
+            highlight={hi}
+            onPick={pick}
+            className="inset-x-3 top-[calc(100%+10px)] hidden md:left-[36%] md:right-auto md:block md:w-[320px]"
+          />
+        )}
+      </form>
+      {sheetNode}
+    </>
   );
 }
