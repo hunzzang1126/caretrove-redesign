@@ -233,6 +233,12 @@ export default function SearchPill({
     const p = new URLSearchParams();
     if (q) p.set("q", q);
     if (loc) p.set("loc", loc);
+    if (date) {
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, "0");
+      const d = String(date.getDate()).padStart(2, "0");
+      p.set("date", `${y}-${m}-${d}`);
+    }
     router.push(`/search${p.size ? `?${p}` : ""}`);
   };
 

@@ -33,7 +33,7 @@ export default function Home() {
         <div className="relative flex w-full max-w-[880px] flex-col items-center">
           <HeroTitle />
           <Reveal delay={0.3}>
-            <p className="mx-auto mt-4 max-w-[30ch] text-balance text-center text-[15px] font-medium leading-snug text-white/85 md:mt-5 md:text-[17px]">
+            <p className="mx-auto mt-4 max-w-[30ch] text-balance text-center text-[15px] font-medium leading-snug text-white/85 md:mt-5 md:max-w-none md:text-[17px]">
               Verified clinics across Michigan, confirmed within 24 hours.
             </p>
           </Reveal>

@@ -11,11 +11,29 @@ export const metadata = {
 export default async function SearchPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; loc?: string; category?: string }>;
+  searchParams: Promise<{ q?: string; loc?: string; category?: string; date?: string }>;
 }) {
-  const { q, loc, category } = await searchParams;
+  const { q, loc, category, date } = await searchParams;
+
+  /* A picked date filters to clinics open on that weekday */
+  let day: number | null = null;
+  let dateLabel = "";
+  if (date && /^\d{4}-\d{2}-\d{2}$/.test(date)) {
+    const [y, m, d] = date.split("-").map(Number);
+    const parsed = new Date(y, m - 1, d);
+    if (!Number.isNaN(parsed.getTime())) {
+      day = parsed.getDay();
+      dateLabel = parsed.toLocaleDateString("en-US", {
+        weekday: "short",
+        month: "short",
+        day: "numeric",
+      });
+    }
+  }
+
   const filtered = clinics.filter((c) => {
     if (category && c.category.toLowerCase() !== category.toLowerCase()) return false;
+    if (day !== null && !c.hours[day]) return false;
     if (loc) {
       const hay = `${c.city} ${c.address ?? ""}`.toLowerCase();
       if (!hay.includes(loc.toLowerCase())) return false;
@@ -38,6 +56,7 @@ export default async function SearchPage({
           {filtered.length} {filtered.length === 1 ? "clinic" : "clinics"}
           {category ? ` in ${category}` : ""}
           {loc ? ` near “${loc}”` : ""}
+          {dateLabel ? ` open on ${dateLabel}` : ""}
         </p>
 
         <div className="scrollbar-none mt-5 flex gap-2.5 overflow-x-auto pb-1">
