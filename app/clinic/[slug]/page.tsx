@@ -106,6 +106,7 @@ export default async function ClinicPage({
 
             <Reveal>
               <ReviewsSection
+                clinicSlug={clinic.slug}
                 clinicName={clinic.name}
                 rating={clinic.rating}
                 count={clinic.reviews}

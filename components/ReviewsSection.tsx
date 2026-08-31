@@ -154,11 +154,13 @@ function WriteReviewModal({
 }
 
 export default function ReviewsSection({
+  clinicSlug,
   clinicName,
   rating,
   count,
   initialReviews,
 }: {
+  clinicSlug: string;
   clinicName: string;
   rating: number | null;
   count: number;
@@ -166,6 +168,31 @@ export default function ReviewsSection({
 }) {
   const [reviews, setReviews] = useState(initialReviews);
   const [open, setOpen] = useState(false);
+  const storageKey = `ct-reviews-${clinicSlug}`;
+
+  /* Demo persistence: reviews written on this device survive reloads via
+     localStorage. A real backend replaces this. */
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(storageKey);
+      if (stored) {
+        const mine = JSON.parse(stored) as Review[];
+        if (Array.isArray(mine) && mine.length) {
+          setReviews((prev) => [...mine, ...prev]);
+        }
+      }
+    } catch {
+      /* private mode or blocked storage: render without saved drafts */
+    }
+  }, [storageKey]);
+
+  const persist = (mine: Review[]) => {
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(mine));
+    } catch {
+      /* storage unavailable: the review still shows for this visit */
+    }
+  };
 
   return (
     <section className="mt-12">
@@ -227,17 +254,22 @@ export default function ReviewsSection({
           clinicName={clinicName}
           onClose={() => setOpen(false)}
           onSubmit={(r) => {
-            setReviews([
-              {
-                author: r.author,
-                rating: r.rating,
-                text: r.text,
-                date: "Just now",
-                verified: false,
-                pending: true,
-              },
-              ...reviews,
-            ]);
+            const mine: Review = {
+              author: r.author,
+              rating: r.rating,
+              text: r.text,
+              date: "Just now",
+              verified: false,
+              pending: true,
+            };
+            setReviews((prev) => [mine, ...prev]);
+            try {
+              const stored = localStorage.getItem(storageKey);
+              const existing = stored ? (JSON.parse(stored) as Review[]) : [];
+              persist([mine, ...existing]);
+            } catch {
+              persist([mine]);
+            }
             setOpen(false);
           }}
         />

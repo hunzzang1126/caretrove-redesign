@@ -22,7 +22,7 @@ export default function ClinicCard({
       onMouseEnter={() => onHover?.(clinic.slug)}
       onMouseLeave={() => onHover?.(null)}
     >
-      <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-stone-100">
+      <div className="ring-shimmer relative aspect-[4/3] overflow-hidden rounded-2xl bg-stone-100">
         <Image
           src={clinic.image}
           alt={`${clinic.name} in ${clinic.city}`}

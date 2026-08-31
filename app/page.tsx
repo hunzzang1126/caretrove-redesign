@@ -92,7 +92,7 @@ export default function Home() {
           {categories.map((c, i) => (
             <Reveal key={c.slug} delay={i * 0.06} className="min-w-[240px] snap-start md:min-w-0">
               <Link href={`/search?category=${c.slug}`} className="group block">
-                <div className="relative aspect-[5/4] overflow-hidden rounded-2xl bg-stone-100">
+                <div className="ring-shimmer relative aspect-[5/4] overflow-hidden rounded-2xl bg-stone-100">
                   <Image
                     src={c.image}
                     alt={c.name}

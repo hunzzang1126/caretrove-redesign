@@ -152,9 +152,46 @@ input:focus-visible {
       rgba(255, 255, 255, 0.2)
     );
 }
+/* Hover-activated shimmer ring for photo cards: static at rest, vivid on touch */
+.ring-shimmer {
+  position: relative;
+}
+.ring-shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  background: conic-gradient(
+    from var(--ct-angle),
+    transparent 0deg,
+    transparent 250deg,
+    rgba(255, 255, 255, 0.95) 295deg,
+    rgba(243, 117, 33, 0.95) 330deg,
+    transparent 360deg
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  animation: ct-ring 4s linear infinite;
+}
+.group:hover .ring-shimmer::after,
+.ring-shimmer:hover::after {
+  opacity: 1;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .glass::before,
-  .glass-deep::before {
+  .glass-deep::before,
+  .ring-shimmer::after {
     animation: none;
   }
 }
