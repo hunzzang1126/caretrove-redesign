@@ -330,14 +330,6 @@ export default function SearchPill({
     setSheet(true);
   };
 
-  const interceptMobile =
-    (field: "q" | "loc" | "date") => (e: React.PointerEvent) => {
-      if (isMobileViewport()) {
-        e.preventDefault();
-        openSheet(field);
-      }
-    };
-
   const listKeys = (e: React.KeyboardEvent) => {
     if (!openList || items.length === 0) return;
     if (e.key === "ArrowDown") {
@@ -614,10 +606,7 @@ export default function SearchPill({
         }}
         className="relative mx-auto flex w-full max-w-[780px] flex-col rounded-3xl border border-stone-200 bg-white shadow-[0_18px_50px_-16px_rgba(28,25,23,0.28)] transition-shadow hover:shadow-[0_24px_60px_-16px_rgba(28,25,23,0.34)] md:h-[72px] md:flex-row md:items-center md:rounded-full"
       >
-        <label
-          className="group relative flex flex-1 cursor-text items-center gap-3 rounded-t-3xl px-7 py-4 transition-colors hover:bg-stone-50 md:h-full md:rounded-full md:py-0"
-          onPointerDown={interceptMobile("q")}
-        >
+        <label className="group relative flex flex-1 cursor-text items-center gap-3 rounded-t-3xl px-7 py-4 transition-colors hover:bg-stone-50 md:h-full md:rounded-full md:py-0">
           <MagnifyingGlass size={19} className="shrink-0 text-stone-400" />
           <span className="flex w-full flex-col">
             <span className="text-[11.5px] font-bold uppercase tracking-wide text-stone-500">
@@ -633,7 +622,12 @@ export default function SearchPill({
                 setOpenList("q");
                 setHi(-1);
               }}
-              onFocus={() => {
+              onFocus={(e) => {
+                if (isMobileViewport()) {
+                  e.target.blur();
+                  openSheet("q");
+                  return;
+                }
                 setOpenList("q");
                 setHi(-1);
                 setCalOpen(false);
@@ -647,10 +641,7 @@ export default function SearchPill({
 
         <span className="mx-7 h-px bg-stone-100 md:mx-0 md:h-9 md:w-px" />
 
-        <label
-          className="group relative flex flex-1 cursor-text items-center gap-3 px-7 py-4 transition-colors hover:bg-stone-50 md:h-full md:rounded-full md:py-0"
-          onPointerDown={interceptMobile("loc")}
-        >
+        <label className="group relative flex flex-1 cursor-text items-center gap-3 px-7 py-4 transition-colors hover:bg-stone-50 md:h-full md:rounded-full md:py-0">
           <MapPin size={19} className="shrink-0 text-stone-400" />
           <span className="flex w-full flex-col">
             <span className="text-[11.5px] font-bold uppercase tracking-wide text-stone-500">
@@ -666,7 +657,12 @@ export default function SearchPill({
                 setOpenList("loc");
                 setHi(-1);
               }}
-              onFocus={() => {
+              onFocus={(e) => {
+                if (isMobileViewport()) {
+                  e.target.blur();
+                  openSheet("loc");
+                  return;
+                }
                 setOpenList("loc");
                 setHi(-1);
                 setCalOpen(false);
@@ -683,9 +679,11 @@ export default function SearchPill({
         <div className="relative flex items-center gap-3 rounded-b-3xl py-3 pl-7 pr-3 md:h-full md:rounded-full md:py-0">
           <button
             type="button"
-            onPointerDown={interceptMobile("date")}
             onClick={() => {
-              if (isMobileViewport()) return;
+              if (isMobileViewport()) {
+                openSheet("date");
+                return;
+              }
               setCalOpen((v) => !v);
               setOpenList(null);
             }}
