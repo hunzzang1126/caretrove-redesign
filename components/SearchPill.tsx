@@ -277,22 +277,47 @@ export default function SearchPill({
   if (compact) {
     return (
       <form
+        ref={formRef}
         onSubmit={(e) => {
           e.preventDefault();
           submit();
         }}
-        className="mx-auto flex h-12 items-center rounded-full border border-stone-200 bg-white pl-5 pr-1.5 shadow-[0_6px_20px_-8px_rgba(28,25,23,0.25)] transition-shadow hover:shadow-[0_10px_28px_-8px_rgba(28,25,23,0.3)]"
+        className="relative mx-auto flex h-12 items-center rounded-full border border-stone-200 bg-white pl-5 pr-1.5 shadow-[0_6px_20px_-8px_rgba(28,25,23,0.25)] transition-shadow hover:shadow-[0_10px_28px_-8px_rgba(28,25,23,0.3)]"
       >
         <input
           value={q}
-          onChange={(e) => setQ(e.target.value)}
+          role="combobox"
+          aria-expanded={openList === "q" && items.length > 0}
+          aria-autocomplete="list"
+          onChange={(e) => {
+            setQ(e.target.value);
+            setOpenList("q");
+            setHi(-1);
+          }}
+          onFocus={() => {
+            setOpenList("q");
+            setHi(-1);
+          }}
+          onKeyDown={listKeys}
           placeholder="Treatment"
           className="w-[120px] bg-transparent text-[13.5px] font-semibold outline-none placeholder:font-medium placeholder:text-stone-500"
         />
         <span className="mx-3 h-6 w-px bg-stone-200" />
         <input
           value={loc}
-          onChange={(e) => setLoc(e.target.value)}
+          role="combobox"
+          aria-expanded={openList === "loc" && items.length > 0}
+          aria-autocomplete="list"
+          onChange={(e) => {
+            setLoc(e.target.value);
+            setOpenList("loc");
+            setHi(-1);
+          }}
+          onFocus={() => {
+            setOpenList("loc");
+            setHi(-1);
+          }}
+          onKeyDown={listKeys}
           placeholder="City or ZIP"
           className="w-[92px] bg-transparent text-[13.5px] font-semibold outline-none placeholder:font-medium placeholder:text-stone-500"
         />
@@ -303,6 +328,22 @@ export default function SearchPill({
         >
           <MagnifyingGlass size={15} weight="bold" />
         </button>
+        {openList === "q" && (
+          <SuggestionList
+            items={items}
+            highlight={hi}
+            onPick={pick}
+            className="left-0 top-[calc(100%+10px)] w-[340px]"
+          />
+        )}
+        {openList === "loc" && (
+          <SuggestionList
+            items={items}
+            highlight={hi}
+            onPick={pick}
+            className="left-[120px] top-[calc(100%+10px)] w-[300px]"
+          />
+        )}
       </form>
     );
   }
