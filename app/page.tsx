@@ -1,10 +1,12 @@
 import Image from "next/image";
+import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
 import SearchPill from "@/components/SearchPill";
 import HeroTitle from "@/components/HeroTitle";
+import HeroPhotos from "@/components/HeroPhotos";
 import ClinicCard from "@/components/ClinicCard";
 import MichiganMap from "@/components/MichiganMap";
 import { categories, cities, clinics, providerBandImage } from "@/lib/data";
@@ -18,44 +20,7 @@ export default function Home() {
 
       {/* Hero: cream editorial band with floating treatment photos */}
       <section className="topo-pattern relative overflow-hidden bg-cream px-5 pb-16 pt-14 md:pb-24 md:pt-20">
-        {/* Floating photo objects, desktop only */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute left-[4%] top-1/2 hidden w-[200px] -translate-y-[58%] motion-safe:animate-[ct-float_7s_ease-in-out_infinite] xl:block"
-          style={{ "--r": "-6deg" } as React.CSSProperties}
-        >
-          <div className="relative aspect-[4/5] overflow-hidden rounded-3xl shadow-[0_24px_50px_-18px_rgba(28,25,23,0.35)]">
-            <Image
-              src="https://images.unsplash.com/photo-1584515933487-779824d29309?w=600&q=80&auto=format&fit=crop"
-              alt=""
-              fill
-              sizes="200px"
-              className="object-cover"
-            />
-            <span className="glass-sheen" aria-hidden />
-          </div>
-        </div>
-        <div
-          aria-hidden
-          className="pointer-events-none absolute right-[4%] top-1/2 hidden w-[185px] -translate-y-[46%] motion-safe:animate-[ct-float_9s_ease-in-out_infinite] xl:block"
-          style={{ "--r": "5deg" } as React.CSSProperties}
-        >
-          <div className="relative aspect-[4/5] overflow-hidden rounded-3xl shadow-[0_24px_50px_-18px_rgba(28,25,23,0.35)]">
-            <Image
-              src="https://images.unsplash.com/photo-1620733723572-11c53f73a416?w=600&q=80&auto=format&fit=crop"
-              alt=""
-              fill
-              sizes="185px"
-              className="object-cover"
-            />
-            <span className="glass-sheen" aria-hidden />
-          </div>
-          <div className="absolute -bottom-4 -left-10 flex items-center gap-1.5 rounded-full bg-white px-4 py-2.5 shadow-[0_12px_30px_-10px_rgba(28,25,23,0.3)]">
-            <span className="text-[14px] font-extrabold">4.7</span>
-            <span className="flex items-center text-brand">★</span>
-            <span className="text-[12.5px] text-stone-500">191 verified reviews</span>
-          </div>
-        </div>
+        <HeroPhotos />
 
         <div className="relative mx-auto flex w-full max-w-[780px] flex-col items-center">
           <HeroTitle />
@@ -109,6 +74,15 @@ export default function Home() {
               <ClinicCard clinic={clinic} />
             </Reveal>
           ))}
+          <Link
+            href="/search"
+            className="flex w-[45%] shrink-0 snap-start flex-col items-center justify-center gap-3 sm:hidden"
+          >
+            <span className="flex size-12 items-center justify-center rounded-full bg-ink text-white transition-transform active:scale-95">
+              <ArrowRight size={20} weight="bold" />
+            </span>
+            <span className="text-[14px] font-bold">View all clinics</span>
+          </Link>
         </div>
       </section>
 
