@@ -19,8 +19,10 @@ export default function Home() {
       <Header pillOnScroll />
 
       {/* Hero: cream editorial band with floating treatment photos */}
-      <section className="topo-pattern relative overflow-hidden bg-cream px-5 pb-16 pt-14 md:pb-24 md:pt-20">
-        <HeroPhotos />
+      <section className="topo-pattern relative bg-cream px-5 pb-16 pt-14 md:pb-24 md:pt-20">
+        <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+          <HeroPhotos />
+        </div>
 
         <div className="relative mx-auto flex w-full max-w-[780px] flex-col items-center">
           <HeroTitle />
