@@ -75,7 +75,7 @@ export default function Home() {
         <div className="mt-8 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
           {clinics.map((clinic, i) => (
             <Reveal key={clinic.slug} delay={(i % 3) * 0.06}>
-              <ClinicCard clinic={clinic} variant="glass" />
+              <ClinicCard clinic={clinic} />
             </Reveal>
           ))}
         </div>
@@ -100,6 +100,7 @@ export default function Home() {
                     sizes="(max-width: 768px) 70vw, 25vw"
                     className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
                   />
+                  <span className="glass-sheen" aria-hidden />
                 </div>
                 <h3 className="mt-3 text-[16px] font-bold">{c.name}</h3>
                 <p className="text-[14px] text-stone-500">{c.blurb}</p>

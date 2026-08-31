@@ -91,6 +91,7 @@ export default function ClinicCard({
           sizes="(max-width: 768px) 100vw, 33vw"
           className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
         />
+        <span className="glass-sheen" aria-hidden />
         {heart}
       </div>
       <div className="mt-3 flex items-start justify-between gap-3">

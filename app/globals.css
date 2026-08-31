@@ -194,6 +194,24 @@ input:focus-visible {
   }
 }
 
+/* Glass sheen overlay: a quiet specular sweep and 1px glass edge laid over a
+   photo, so cards keep their layout but read as glazed. Markup: an empty
+   <span class="glass-sheen" /> inside the rounded image container. */
+.glass-sheen {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.26),
+    rgba(255, 255, 255, 0.05) 26%,
+    transparent 46%
+  );
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
 /* Hover-activated shimmer ring for photo cards: static at rest, vivid on touch */
 .ring-shimmer::after {
   content: "";

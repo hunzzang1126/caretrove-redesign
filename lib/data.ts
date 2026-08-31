@@ -1,7 +1,7 @@
 const u = (id: string, w = 1200) =>
   `https://images.unsplash.com/photo-${id}?w=${w}&q=80&auto=format&fit=crop`;
 
-export const heroImage = u("1507652313519-d4e9174996dd", 2000);
+export const heroImage = u("1544161515-4ab6ce6db874", 2000);
 export const providerBandImage = u("1519823551278-64ac92734fb1", 2000);
 
 export type Category = {
@@ -161,7 +161,7 @@ export const clinics: Clinic[] = [
     rating: 4.7,
     reviews: 26,
     services: ["Hot Stone Massage", "Aromatherapy", "Lymphatic Drainage"],
-    image: u("1544161515-4ab6ce6db874", 1200),
+    image: u("1519824145371-296894a0daa9", 1200),
     address: "300 Grove St, East Lansing, MI 48823",
     phone: "(517) 555-0163",
     about:
