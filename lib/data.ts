@@ -53,11 +53,14 @@ export type Clinic = {
   about?: string;
   lng: number;
   lat: number;
+  /* Sunday..Saturday, 24h "H:MM" strings, null = closed */
+  hours: ([string, string] | null)[];
 };
 
 export const clinics: Clinic[] = [
   {
     slug: "great-lakes-wellness-ann-arbor",
+    hours: [null, ["9:00", "17:00"], ["9:00", "17:00"], ["9:00", "17:00"], ["9:00", "17:00"], ["9:00", "17:00"], null],
     lng: -83.743,
     lat: 42.2808,
     name: "Great Lakes Wellness",
@@ -81,6 +84,7 @@ export const clinics: Clinic[] = [
   },
   {
     slug: "motor-city-medspa-birmingham",
+    hours: [null, null, ["10:00", "18:00"], ["10:00", "18:00"], ["10:00", "19:00"], ["10:00", "18:00"], ["9:00", "15:00"]],
     lng: -83.2113,
     lat: 42.5467,
     name: "Motor City MedSpa",
@@ -97,6 +101,7 @@ export const clinics: Clinic[] = [
   },
   {
     slug: "kimmie-e-esthetics",
+    hours: [["11:00", "16:00"], null, null, ["10:00", "16:00"], ["10:00", "16:00"], ["10:00", "18:00"], ["9:00", "17:00"]],
     lng: -83.2455,
     lat: 42.5837,
     name: "Kimmie E. Esthetics",
@@ -113,6 +118,7 @@ export const clinics: Clinic[] = [
   },
   {
     slug: "soluna-wellness-studio",
+    hours: [null, ["9:00", "20:00"], ["9:00", "20:00"], ["9:00", "20:00"], ["9:00", "20:00"], ["9:00", "18:00"], ["10:00", "14:00"]],
     lng: -82.9199,
     lat: 42.587,
     name: "Soluna Wellness Studio",
@@ -129,6 +135,7 @@ export const clinics: Clinic[] = [
   },
   {
     slug: "lakeshore-aesthetics-detroit",
+    hours: [null, ["9:00", "17:00"], ["9:00", "17:00"], ["9:00", "19:00"], ["9:00", "19:00"], ["9:00", "17:00"], ["10:00", "15:00"]],
     lng: -83.0458,
     lat: 42.3314,
     name: "Lakeshore Aesthetics",
@@ -145,6 +152,7 @@ export const clinics: Clinic[] = [
   },
   {
     slug: "aqua-aesthetics-wellness",
+    hours: [["10:00", "16:00"], null, ["9:00", "19:00"], ["9:00", "19:00"], ["9:00", "19:00"], ["9:00", "19:00"], ["9:00", "17:00"]],
     lng: -84.4839,
     lat: 42.737,
     name: "Aqua Aesthetics & Wellness",

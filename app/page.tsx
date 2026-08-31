@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
 import SearchPill from "@/components/SearchPill";
+import HeroTitle from "@/components/HeroTitle";
 import ClinicCard from "@/components/ClinicCard";
 import MichiganMap from "@/components/MichiganMap";
 import { categories, cities, clinics, heroImage, providerBandImage } from "@/lib/data";
@@ -17,28 +18,29 @@ export default function Home() {
 
       {/* Hero: short photo band, search pill front and center */}
       <section className="relative flex min-h-[560px] flex-col items-center justify-center bg-[#b3a290] px-5 py-20 md:min-h-[62dvh]">
-        <Image
-          src={heroImage}
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/25 to-black/40" />
+        <div className="absolute inset-0 overflow-hidden">
+          <Image
+            src={heroImage}
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover motion-safe:animate-[kenburns_9s_ease-out_both]"
+          />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/25 to-black/45" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_60%_at_50%_42%,transparent_30%,rgba(0,0,0,0.28)_100%)]" />
         <div className="relative flex w-full max-w-[880px] flex-col items-center">
-          <Reveal className="w-full text-center">
-            <h1 className="text-4xl font-extrabold leading-[1.06] tracking-tight text-white md:text-[56px]">
-              Book care you can trust.
-            </h1>
-            <p className="mt-4 text-[17px] font-medium text-white/85">
+          <HeroTitle />
+          <Reveal delay={0.3}>
+            <p className="mt-5 text-center text-[17px] font-medium text-white/85">
               Verified clinics across Michigan, confirmed within 24 hours.
             </p>
           </Reveal>
-          <Reveal delay={0.08} className="mt-8 w-full">
+          <Reveal delay={0.25} className="mt-8 w-full">
             <SearchPill />
           </Reveal>
-          <Reveal delay={0.16}>
+          <Reveal delay={0.4}>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-2.5">
               {popular.map((t) => (
                 <Link
@@ -59,7 +61,7 @@ export default function Home() {
       <section className="mx-auto max-w-[1500px] px-5 py-16 md:px-10 md:py-20">
         <Reveal>
           <div className="flex items-end justify-between">
-            <h2 className="text-3xl font-extrabold tracking-tight md:text-4xl">
+            <h2 className="font-display text-3xl font-extrabold tracking-tight md:text-4xl">
               Featured in Michigan
             </h2>
             <Link
@@ -82,7 +84,7 @@ export default function Home() {
       {/* Treatments */}
       <section className="mx-auto max-w-[1500px] px-5 pb-16 md:px-10 md:pb-20">
         <Reveal>
-          <h2 className="text-3xl font-extrabold tracking-tight md:text-4xl">
+          <h2 className="font-display text-3xl font-extrabold tracking-tight md:text-4xl">
             Browse by treatment
           </h2>
         </Reveal>
@@ -112,7 +114,7 @@ export default function Home() {
         <div className="mx-auto grid max-w-[1500px] items-center gap-10 px-5 py-16 md:grid-cols-[1fr_360px] md:px-10 md:py-24">
           <div>
             <Reveal>
-              <h2 className="text-3xl font-extrabold tracking-tight md:text-4xl">
+              <h2 className="font-display text-3xl font-extrabold tracking-tight md:text-4xl">
                 Browse by city
               </h2>
               <p className="mt-2 text-[16px] text-stone-500">
@@ -157,7 +159,7 @@ export default function Home() {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/10 to-transparent" />
             <div className="glass-deep absolute inset-x-5 bottom-5 rounded-2xl p-7 md:inset-x-auto md:bottom-10 md:left-10 md:max-w-[460px] md:p-9">
-              <h2 className="text-3xl font-extrabold leading-tight tracking-tight text-white md:text-4xl">
+              <h2 className="font-display text-3xl font-extrabold leading-tight tracking-tight text-white md:text-4xl">
                 Run a clinic? Get discovered.
               </h2>
               <p className="mt-3 text-[15px] leading-relaxed text-white/85">

@@ -23,7 +23,7 @@ export type MapMarker = {
 
 const PIN_SVG = `<svg viewBox="0 0 26 30" width="34" height="39" aria-hidden="true"><path d="M13 1C6.9 1 2 5.8 2 11.7 2 19.6 13 29 13 29s11-9.4 11-17.3C24 5.8 19.1 1 13 1z" fill="#F37521" stroke="#ffffff" stroke-width="1.4"/><circle cx="13" cy="11.4" r="4.2" fill="#ffffff"/></svg>`;
 
-const STYLE = "https://tiles.openfreemap.org/styles/positron";
+const STYLE = "https://tiles.openfreemap.org/styles/liberty";
 
 export default function ClinicMap({
   markers,

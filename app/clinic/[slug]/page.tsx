@@ -1,11 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Star, MapPin, Phone, SealCheck } from "@phosphor-icons/react/dist/ssr";
+import { Star, MapPin, Phone } from "@phosphor-icons/react/dist/ssr";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
 import MiniMap from "@/components/MiniMap";
+import HoursCard from "@/components/HoursCard";
+import ReviewsSection from "@/components/ReviewsSection";
 import { clinics, reviews } from "@/lib/data";
 
 export function generateStaticParams() {
@@ -29,7 +31,7 @@ export default async function ClinicPage({
       <Header />
       <main className="mx-auto max-w-[1200px] px-5 py-8 md:px-10">
         <Reveal>
-          <h1 className="text-[28px] font-extrabold tracking-tight md:text-[34px]">
+          <h1 className="font-display text-[30px] font-extrabold tracking-tight md:text-[38px]">
             {clinic.name}
           </h1>
           <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[15px]">
@@ -84,70 +86,61 @@ export default async function ClinicPage({
             </Reveal>
 
             <Reveal className="mt-10">
-              <h2 className="text-xl font-extrabold tracking-tight">Services</h2>
+              <h2 className="font-display text-xl font-extrabold tracking-tight">
+                Services
+              </h2>
               <ul className="mt-4 divide-y divide-stone-100">
                 {clinic.services.map((s) => (
-                  <li
-                    key={s}
-                    className="flex items-center justify-between py-4"
-                  >
+                  <li key={s} className="flex items-center justify-between py-4">
                     <span className="text-[15px] font-semibold">{s}</span>
-                    <span className="text-[14px] text-stone-400">
+                    <Link
+                      href={`/book/${clinic.slug}?service=${encodeURIComponent(s)}`}
+                      className="rounded-full border border-stone-300 px-4 py-2 text-[13.5px] font-bold transition-all hover:border-brand hover:text-brand-text active:scale-[0.97]"
+                    >
                       Request to book
-                    </span>
+                    </Link>
                   </li>
                 ))}
               </ul>
             </Reveal>
 
-            {clinicReviews.length > 0 && (
-              <Reveal className="mt-10">
-                <h2 className="text-xl font-extrabold tracking-tight">
-                  Reviews
-                </h2>
-                <div className="mt-5 space-y-7">
-                  {clinicReviews.map((r) => (
-                    <div key={r.author}>
-                      <div className="flex items-center gap-2.5">
-                        <span className="flex size-9 items-center justify-center rounded-full bg-stone-100 text-[13px] font-bold">
-                          {r.author[0]}
-                        </span>
-                        <div>
-                          <p className="flex items-center gap-1.5 text-[14px] font-bold">
-                            {r.author}
-                            {r.verified && (
-                              <span className="flex items-center gap-0.5 text-[12px] font-semibold text-brand-text">
-                                <SealCheck size={13} weight="fill" />
-                                Verified visit
-                              </span>
-                            )}
-                          </p>
-                          <p className="text-[13px] text-stone-400">{r.date}</p>
-                        </div>
-                      </div>
-                      <p className="mt-2.5 max-w-[60ch] text-[15px] leading-relaxed text-stone-600">
-                        {r.text}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </Reveal>
-            )}
+            <Reveal>
+              <ReviewsSection
+                clinicName={clinic.name}
+                rating={clinic.rating}
+                count={clinic.reviews}
+                initialReviews={clinicReviews.map((r) => ({
+                  author: r.author,
+                  date: r.date,
+                  rating: r.rating,
+                  verified: r.verified,
+                  text: r.text,
+                }))}
+              />
+            </Reveal>
           </div>
 
           {/* Booking card */}
           <div>
             <Reveal className="lg:sticky lg:top-24">
               <div className="rounded-2xl border border-stone-200 p-6 shadow-[0_16px_40px_-16px_rgba(28,25,23,0.15)]">
-                <p className="text-lg font-extrabold">Request an appointment</p>
+                <p className="font-display text-lg font-extrabold">
+                  Request an appointment
+                </p>
                 <p className="mt-1 text-[14px] leading-relaxed text-stone-500">
                   Pick a time and the clinic confirms within 24 hours. No
                   account needed.
                 </p>
-                <button className="mt-5 w-full rounded-xl bg-brand py-3.5 text-[16px] font-bold text-white transition-all hover:bg-brand-deep active:scale-[0.99]">
+                <Link
+                  href={`/book/${clinic.slug}`}
+                  className="mt-5 block w-full rounded-xl bg-brand py-3.5 text-center text-[16px] font-bold text-white transition-all hover:bg-brand-deep active:scale-[0.99]"
+                >
                   Request a booking
-                </button>
-                <div className="mt-6 space-y-3 border-t border-stone-100 pt-5 text-[14px] text-stone-600">
+                </Link>
+
+                <HoursCard hours={clinic.hours} />
+
+                <div className="mt-5 space-y-3 border-t border-stone-100 pt-5 text-[14px] text-stone-600">
                   {clinic.address && (
                     <p className="flex items-start gap-2.5">
                       <MapPin size={17} className="mt-0.5 shrink-0 text-stone-400" />

@@ -8,6 +8,7 @@
   --color-mist: #fafaf9;
   --color-cream: #faf6f0;
   --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-bricolage), var(--font-jakarta), ui-sans-serif, sans-serif;
 }
 
 html {
@@ -45,24 +46,117 @@ input:focus-visible {
   outline-offset: 2px;
 }
 
-/* Frosted glass surfaces (fallback below for reduced transparency) */
+/* ---- Frosted glass system ----
+   Layers: gradient fill + blur/saturate, specular top edge, soft drop,
+   and a slow conic shimmer running along a 1px gradient ring. */
+@property --ct-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes ct-ring {
+  to {
+    --ct-angle: 360deg;
+  }
+}
+@keyframes kenburns {
+  from {
+    transform: scale(1.08);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.glass,
+.glass-deep {
+  position: relative;
+  isolation: isolate;
+}
 .glass {
-  background: rgba(255, 255, 255, 0.18);
-  backdrop-filter: blur(18px) saturate(160%);
-  -webkit-backdrop-filter: blur(18px) saturate(160%);
-  border: 1px solid rgba(255, 255, 255, 0.32);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.28),
+    rgba(255, 255, 255, 0.08) 55%,
+    rgba(255, 255, 255, 0.16)
+  );
+  backdrop-filter: blur(20px) saturate(170%);
+  -webkit-backdrop-filter: blur(20px) saturate(170%);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.4),
-    0 8px 28px rgba(28, 25, 23, 0.18);
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.08),
+    0 8px 28px rgba(28, 25, 23, 0.22);
 }
 .glass-deep {
-  background: rgba(28, 25, 23, 0.32);
-  backdrop-filter: blur(20px) saturate(150%);
-  -webkit-backdrop-filter: blur(20px) saturate(150%);
-  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: linear-gradient(
+    150deg,
+    rgba(48, 42, 38, 0.55),
+    rgba(28, 25, 23, 0.35) 60%,
+    rgba(48, 42, 38, 0.45)
+  );
+  backdrop-filter: blur(22px) saturate(150%);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.06),
     0 12px 36px rgba(28, 25, 23, 0.3);
+}
+/* 1px gradient ring with a slow vivid shimmer sweeping around it */
+.glass::before,
+.glass-deep::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  pointer-events: none;
+  background:
+    conic-gradient(
+      from var(--ct-angle),
+      transparent 0deg,
+      transparent 280deg,
+      rgba(255, 255, 255, 0.9) 310deg,
+      rgba(243, 117, 33, 0.85) 330deg,
+      transparent 360deg
+    ),
+    linear-gradient(
+      160deg,
+      rgba(255, 255, 255, 0.55),
+      rgba(255, 255, 255, 0.12) 40%,
+      rgba(255, 255, 255, 0.3)
+    );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  animation: ct-ring 7s linear infinite;
+}
+.glass-deep::before {
+  background:
+    conic-gradient(
+      from var(--ct-angle),
+      transparent 0deg,
+      transparent 285deg,
+      rgba(255, 255, 255, 0.7) 315deg,
+      rgba(243, 117, 33, 0.9) 335deg,
+      transparent 360deg
+    ),
+    linear-gradient(
+      160deg,
+      rgba(255, 255, 255, 0.35),
+      rgba(255, 255, 255, 0.08) 45%,
+      rgba(255, 255, 255, 0.2)
+    );
+}
+@media (prefers-reduced-motion: reduce) {
+  .glass::before,
+  .glass-deep::before {
+    animation: none;
+  }
 }
 @media (prefers-reduced-transparency: reduce) {
   .glass {
