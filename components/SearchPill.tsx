@@ -79,20 +79,29 @@ function ItemRow({
   item,
   active = false,
   onPick,
+  instant = true,
 }: {
   item: Item;
   active?: boolean;
   onPick: (item: Item) => void;
+  /* instant: select on pointerdown (desktop dropdown, beats input blur).
+     Off in the mobile sheet so a scroll gesture never triggers a pick. */
+  instant?: boolean;
 }) {
+  const pickProps = instant
+    ? {
+        onPointerDown: (e: React.PointerEvent) => {
+          e.preventDefault();
+          onPick(item);
+        },
+      }
+    : { onClick: () => onPick(item) };
   return (
     <button
       type="button"
       role="option"
       aria-selected={active}
-      onPointerDown={(e) => {
-        e.preventDefault();
-        onPick(item);
-      }}
+      {...pickProps}
       className={`flex w-full items-center gap-3 px-4 py-2.5 text-left transition-colors ${
         active ? "bg-stone-50" : "hover:bg-stone-50"
       }`}
@@ -392,6 +401,7 @@ export default function SearchPill({
                   key={`${item.kind}-${item.label}`}
                   item={item}
                   onPick={sheetPick}
+                  instant={false}
                 />
               ))}
             </div>
@@ -426,6 +436,7 @@ export default function SearchPill({
                   key={`${item.kind}-${item.label}`}
                   item={item}
                   onPick={sheetPick}
+                  instant={false}
                 />
               ))}
             </div>
