@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { createPortal } from "react-dom";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   MagnifyingGlass,
@@ -236,6 +237,8 @@ export default function SearchPill({
   const [hi, setHi] = useState(-1);
   /* Mobile: a full-screen search sheet replaces inline dropdowns */
   const [sheet, setSheet] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
   const [sheetField, setSheetField] = useState<"q" | "loc" | "date" | null>("q");
 
   const items = useMemo(
@@ -356,7 +359,7 @@ export default function SearchPill({
     ? date.toLocaleDateString("en-US", { month: "short", day: "numeric" })
     : "Add date";
 
-  const sheetNode = sheet ? (
+  const sheetInner = sheet ? (
     <div className="fixed inset-0 z-50 flex flex-col bg-white md:hidden">
       <div className="flex items-center justify-between border-b border-stone-100 px-5 py-4">
         <p className="font-display text-lg font-extrabold tracking-tight">
@@ -510,6 +513,9 @@ export default function SearchPill({
       </div>
     </div>
   ) : null;
+
+  const sheetNode =
+    mounted && sheetInner ? createPortal(sheetInner, document.body) : null;
 
   if (compact) {
     return (
