@@ -18,7 +18,7 @@ const cols = [
 
 export default function Footer() {
   return (
-    <footer className="border-t border-stone-200 bg-mist">
+    <footer className="topo-pattern border-t border-stone-200 bg-cream">
       <div className="mx-auto max-w-[1400px] px-5 py-14 md:px-10">
         <div className="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div>

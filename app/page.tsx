@@ -5,7 +5,8 @@ import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
 import SearchCard from "@/components/SearchCard";
 import ClinicCard from "@/components/ClinicCard";
-import { categories, clinics, heroImage, providerBandImage } from "@/lib/data";
+import MichiganMap from "@/components/MichiganMap";
+import { categories, cities, clinics, heroImage, providerBandImage } from "@/lib/data";
 
 export default function Home() {
   return (
@@ -33,7 +34,7 @@ export default function Home() {
       {/* Treatments */}
       <section className="mx-auto max-w-[1400px] px-5 py-16 md:px-10 md:py-24">
         <Reveal>
-          <h2 className="text-2xl font-extrabold tracking-tight md:text-3xl">
+          <h2 className="text-3xl font-extrabold tracking-tight md:text-4xl">
             Browse by treatment
           </h2>
         </Reveal>
@@ -62,7 +63,7 @@ export default function Home() {
       <section className="mx-auto max-w-[1400px] px-5 pb-16 md:px-10 md:pb-24">
         <Reveal>
           <div className="flex items-end justify-between">
-            <h2 className="text-2xl font-extrabold tracking-tight md:text-3xl">
+            <h2 className="text-3xl font-extrabold tracking-tight md:text-4xl">
               Featured in Michigan
             </h2>
             <Link
@@ -82,8 +83,44 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Browse by city */}
+      <section className="topo-pattern bg-cream">
+        <div className="mx-auto grid max-w-[1400px] items-center gap-10 px-5 py-16 md:grid-cols-[1fr_360px] md:px-10 md:py-24">
+          <div>
+            <Reveal>
+              <h2 className="text-3xl font-extrabold tracking-tight md:text-4xl">
+                Browse by city
+              </h2>
+              <p className="mt-2 text-[16px] text-stone-500">
+                Every clinic on CareTrove is in Michigan.
+              </p>
+            </Reveal>
+            <div className="mt-8 grid gap-x-10 sm:grid-cols-2">
+              {cities.map((city, i) => (
+                <Reveal key={city.name} delay={i * 0.04}>
+                  <Link
+                    href="/search"
+                    className="group flex items-baseline justify-between border-b border-stone-200 py-4 transition-colors hover:border-brand"
+                  >
+                    <span className="text-[17px] font-bold transition-colors group-hover:text-brand-text">
+                      {city.name}
+                    </span>
+                    <span className="text-[14px] text-stone-400">
+                      {city.count} clinics
+                    </span>
+                  </Link>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+          <Reveal className="hidden md:block">
+            <MichiganMap className="mx-auto w-full max-w-[320px]" />
+          </Reveal>
+        </div>
+      </section>
+
       {/* Provider band */}
-      <section className="mx-auto max-w-[1400px] px-5 pb-20 md:px-10 md:pb-28">
+      <section className="mx-auto max-w-[1400px] px-5 py-16 md:px-10 md:py-24">
         <Reveal>
           <div className="relative overflow-hidden rounded-3xl">
             <Image

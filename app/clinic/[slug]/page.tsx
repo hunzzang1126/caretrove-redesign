@@ -34,7 +34,7 @@ export default async function ClinicPage({
           <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[15px]">
             {clinic.rating && (
               <span className="flex items-center gap-1 font-semibold">
-                <Star size={15} weight="fill" />
+                <Star size={15} weight="fill" className="text-brand" />
                 {clinic.rating.toFixed(1)}
                 <span className="font-normal text-stone-500">
                   ({clinic.reviews} reviews)

@@ -6,6 +6,7 @@
   --color-brand-text: #b84d0c;
   --color-ink: #1c1917;
   --color-mist: #fafaf9;
+  --color-cream: #faf6f0;
   --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
 }
 
@@ -30,4 +31,16 @@ body {
 }
 .scrollbar-none::-webkit-scrollbar {
   display: none;
+}
+
+/* Wave texture carried over from the original CareTrove brand */
+.topo-pattern {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='72'%3E%3Cpath d='M-10 12q30 -14 60 0t60 0M-10 36q30 -14 60 0t60 0M-10 60q30 -14 60 0t60 0' fill='none' stroke='%2333281e' stroke-width='1' opacity='0.05'/%3E%3C/svg%3E");
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid #f37521;
+  outline-offset: 2px;
 }

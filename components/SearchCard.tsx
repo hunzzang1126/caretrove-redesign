@@ -17,7 +17,7 @@ export default function SearchCard() {
       }}
       className="w-full max-w-[420px] rounded-2xl bg-white p-7 shadow-[0_24px_60px_-12px_rgba(28,25,23,0.35)] md:p-8"
     >
-      <h1 className="text-[28px] font-extrabold leading-[1.15] tracking-tight md:text-[32px]">
+      <h1 className="text-[30px] font-extrabold leading-[1.12] tracking-tight md:text-[36px]">
         Book care you can trust.
       </h1>
 

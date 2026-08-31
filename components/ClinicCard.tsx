@@ -27,7 +27,7 @@ export default function ClinicCard({ clinic }: { clinic: Clinic }) {
         </div>
         {clinic.rating && (
           <span className="flex shrink-0 items-center gap-1 text-[14px] font-semibold">
-            <Star size={14} weight="fill" className="text-ink" />
+            <Star size={14} weight="fill" className="text-brand" />
             {clinic.rating.toFixed(1)}
           </span>
         )}

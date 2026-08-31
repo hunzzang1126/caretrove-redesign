@@ -97,7 +97,7 @@ export const clinics: Clinic[] = [
     rating: 4.8,
     reviews: 22,
     services: ["Brow Shaping", "Dermaplaning", "Chemical Peels"],
-    image: u("1519415387722-a1c3bbef716c", 1200),
+    image: u("1616394584738-fc6e612e71b9", 1200),
     address: "4080 Telegraph Rd, Bloomfield Township, MI 48302",
     phone: "(248) 555-0177",
     about:
@@ -125,7 +125,7 @@ export const clinics: Clinic[] = [
     rating: 4.5,
     reviews: 40,
     services: ["Microneedling", "HydraFacial", "Laser Hair Removal"],
-    image: u("1552693673-1bf958298935", 1200),
+    image: u("1560750588-73207b1ef5b8", 1200),
     address: "1420 Washington Blvd, Detroit, MI 48226",
     phone: "(313) 555-0186",
     about:
@@ -145,6 +145,15 @@ export const clinics: Clinic[] = [
     about:
       "A quiet massage-first practice near campus, with therapists who remember how you like the pressure.",
   },
+];
+
+export const cities = [
+  { name: "Detroit", count: 4 },
+  { name: "Ann Arbor", count: 3 },
+  { name: "Birmingham", count: 2 },
+  { name: "Grand Rapids", count: 2 },
+  { name: "East Lansing", count: 2 },
+  { name: "Bloomfield Township", count: 2 },
 ];
 
 export const reviews = [
