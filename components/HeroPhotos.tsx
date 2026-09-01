@@ -13,14 +13,26 @@ function PinnedPhoto({
   src,
   sizes,
   rounded = "rounded-2xl",
+  tilt = 0,
 }: {
   src: string;
   sizes: string;
   rounded?: string;
+  /* photo tilt in degrees; the pin counter-rotates to stay upright */
+  tilt?: number;
 }) {
   return (
     <div className="relative">
-      <BrandPin className="absolute -top-4 left-1/2 z-10 h-auto w-[19px] -translate-x-1/2 drop-shadow-[0_3px_4px_rgba(28,25,23,0.3)]" />
+      <span
+        className="absolute -top-5 left-1/2 z-10 block w-[27px] -translate-x-1/2"
+        style={{ transform: `translateX(-50%) rotate(${-tilt}deg)` }}
+      >
+        <BrandPin className="h-auto w-full drop-shadow-[0_1px_2px_rgba(28,25,23,0.45)] [filter:drop-shadow(0_1px_2px_rgba(28,25,23,0.45))_drop-shadow(0_8px_14px_rgba(28,25,23,0.25))]" />
+        <span
+          aria-hidden
+          className="absolute left-1/2 top-[calc(100%-4px)] h-[5px] w-[12px] -translate-x-1/2 rounded-full bg-ink/25 blur-[2px]"
+        />
+      </span>
       <div
         className={`relative aspect-[4/5] overflow-hidden ${rounded} shadow-[0_24px_50px_-18px_rgba(28,25,23,0.35)]`}
       >
@@ -50,7 +62,7 @@ export default function HeroPhotos() {
           className="motion-safe:animate-[ct-float_7s_ease-in-out_infinite]"
           style={{ "--r": "-6deg" } as React.CSSProperties}
         >
-          <PinnedPhoto src={LEFT_PHOTO} sizes="200px" rounded="rounded-3xl" />
+          <PinnedPhoto src={LEFT_PHOTO} sizes="200px" rounded="rounded-3xl" tilt={-6} />
         </div>
       </motion.div>
 
@@ -63,7 +75,7 @@ export default function HeroPhotos() {
           className="motion-safe:animate-[ct-float_9s_ease-in-out_infinite]"
           style={{ "--r": "5deg" } as React.CSSProperties}
         >
-          <PinnedPhoto src={RIGHT_PHOTO} sizes="185px" rounded="rounded-3xl" />
+          <PinnedPhoto src={RIGHT_PHOTO} sizes="185px" rounded="rounded-3xl" tilt={5} />
         </div>
       </motion.div>
     </>

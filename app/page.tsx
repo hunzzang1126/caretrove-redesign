@@ -21,16 +21,19 @@ const popular = ["Botox", "Hydrafacial", "Laser Hair Removal", "IV Vitamin Thera
 const howItWorks = [
   {
     icon: MagnifyingGlass,
+    pinTilt: -7,
     title: "Search",
     body: "Find what you need by service, provider, or location.",
   },
   {
     icon: Scales,
+    pinTilt: 4,
     title: "Compare",
     body: "View services, prices, availability, and verified patient reviews side by side.",
   },
   {
     icon: CalendarCheck,
+    pinTilt: -3,
     title: "Book",
     body: "Choose your care and schedule a time that works for you.",
   },
@@ -128,7 +131,16 @@ export default function Home() {
                 key={step.title}
                 className="relative min-w-[260px] snap-start rounded-2xl bg-white p-7 shadow-[0_10px_30px_-18px_rgba(28,25,23,0.25)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_24px_50px_-20px_rgba(28,25,23,0.35)] md:min-w-0"
               >
-                <BrandPin className="absolute -top-4 left-7 h-auto w-[20px] drop-shadow-[0_3px_4px_rgba(28,25,23,0.25)]" />
+                <span
+                  className="absolute -top-5 left-7 block w-[26px]"
+                  style={{ transform: `rotate(${step.pinTilt}deg)` }}
+                >
+                  <BrandPin className="h-auto w-full [filter:drop-shadow(0_1px_2px_rgba(28,25,23,0.45))_drop-shadow(0_8px_14px_rgba(28,25,23,0.22))]" />
+                  <span
+                    aria-hidden
+                    className="absolute left-1/2 top-[calc(100%-4px)] h-[5px] w-[12px] -translate-x-1/2 rounded-full bg-ink/20 blur-[2px]"
+                  />
+                </span>
                 <span className="flex size-12 items-center justify-center rounded-full bg-gradient-to-br from-[#F67E50] via-[#F15A25] to-[#D14A1A] text-white shadow-[0_8px_20px_-8px_rgba(241,90,37,0.6)]">
                   <step.icon size={22} weight="bold" />
                 </span>
