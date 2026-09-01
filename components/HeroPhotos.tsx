@@ -4,10 +4,8 @@ import Image from "next/image";
 import { motion, useScroll, useTransform, useReducedMotion } from "motion/react";
 import BrandPin from "@/components/BrandPin";
 
-const LEFT_PHOTO =
-  "https://images.unsplash.com/photo-1584515933487-779824d29309?w=600&q=80&auto=format&fit=crop";
-const RIGHT_PHOTO =
-  "https://images.unsplash.com/photo-1620733723572-11c53f73a416?w=600&q=80&auto=format&fit=crop";
+const LEFT_PHOTO = "/images/hero-left.jpg";
+const RIGHT_PHOTO = "/images/hero-right.jpg";
 
 function PinnedPhoto({
   src,

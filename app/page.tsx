@@ -160,7 +160,7 @@ export default function Home() {
         <Reveal className="mt-8 grid items-center gap-10 md:mt-10 md:grid-cols-2 md:gap-14">
           <div className="ring-shimmer group relative aspect-[4/3] overflow-hidden rounded-3xl bg-stone-100">
             <Image
-              src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=1400&q=80&auto=format&fit=crop"
+              src="/images/why-use.jpg"
               alt="A therapist giving a warm oil massage"
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
@@ -197,7 +197,7 @@ export default function Home() {
           <div className="relative overflow-hidden rounded-3xl">
             <Image
               src={providerBandImage}
-              alt="A massage therapist at work"
+              alt="A therapist preparing a treatment table in a wellness studio"
               width={2000}
               height={900}
               sizes="(max-width: 1500px) 100vw, 1500px"

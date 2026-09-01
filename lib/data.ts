@@ -2,7 +2,7 @@ const u = (id: string, w = 1200) =>
   `https://images.unsplash.com/photo-${id}?w=${w}&q=80&auto=format&fit=crop`;
 
 export const heroImage = u("1544161515-4ab6ce6db874", 2000);
-export const providerBandImage = u("1519823551278-64ac92734fb1", 2000);
+export const providerBandImage = "/images/provider-band.jpg";
 
 export type Category = {
   slug: string;
@@ -16,25 +16,25 @@ export const categories: Category[] = [
     slug: "cosmetic",
     name: "Cosmetic",
     blurb: "Injectables, facials, laser",
-    image: u("1512290923902-8a9f81dc236c", 900),
+    image: "/images/cat-cosmetic.jpg",
   },
   {
     slug: "restorative",
     name: "Restorative",
     blurb: "Massage, recovery, bodywork",
-    image: u("1600334129128-685c5582fd35", 900),
+    image: "/images/cat-restorative.jpg",
   },
   {
     slug: "preventative",
     name: "Preventative",
     blurb: "Wellness, yoga, nutrition",
-    image: u("1545205597-3d9d02c29597", 900),
+    image: "/images/cat-preventative.jpg",
   },
   {
     slug: "diagnostic",
     name: "Diagnostic",
     blurb: "Screening, lab panels",
-    image: u("1631217868264-e5b90bb7e133", 900),
+    image: "/images/cat-diagnostic.jpg",
   },
 ];
 
