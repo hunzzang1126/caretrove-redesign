@@ -1,10 +1,6 @@
-"use client";
-
-import { motion, useReducedMotion } from "motion/react";
-
-/* Entrance reveal. The viewport margin extends 240px below the fold so the
-   animation has already played by the time the element is actually visible:
-   fast flicks on mobile never see blank gaps. */
+/* Entrance rise, pure CSS. It must never depend on JS running: a stalled
+   animation frame on first paint was leaving whole sections invisible, which
+   read as "the page starts scrolled down". CSS animations paint regardless. */
 export default function Reveal({
   children,
   delay = 0,
@@ -14,16 +10,12 @@ export default function Reveal({
   delay?: number;
   className?: string;
 }) {
-  const reduce = useReducedMotion();
   return (
-    <motion.div
-      className={className}
-      initial={reduce ? false : { opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.05, margin: "0px 0px 240px 0px" }}
-      transition={{ duration: 0.5, delay, ease: [0.16, 1, 0.3, 1] }}
+    <div
+      className={`motion-safe:animate-[ct-rise_0.55s_cubic-bezier(0.16,1,0.3,1)_both] ${className ?? ""}`}
+      style={delay ? { animationDelay: `${delay}s` } : undefined}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }
