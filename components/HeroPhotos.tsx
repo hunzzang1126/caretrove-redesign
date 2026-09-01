@@ -52,11 +52,8 @@ export default function HeroPhotos() {
         style={reduce ? undefined : { y: ySlow }}
         className="pointer-events-none absolute left-[2%] top-[16%] hidden w-[168px] md:block xl:left-[4%] xl:top-[14%] xl:w-[200px]"
       >
-        <div
-          className="motion-safe:animate-[ct-float_7s_ease-in-out_infinite]"
-          style={{ "--r": "-6deg" } as React.CSSProperties}
-        >
-          <PinnedPhoto src={LEFT_PHOTO} sizes="200px" rounded="rounded-3xl" tilt={-6} />
+        <div style={{ transform: "rotate(-6deg)" }}>
+          <PinnedPhoto src={LEFT_PHOTO} sizes="400px" rounded="rounded-3xl" tilt={-6} />
         </div>
       </motion.div>
 
@@ -65,11 +62,8 @@ export default function HeroPhotos() {
         style={reduce ? undefined : { y: yFast }}
         className="pointer-events-none absolute right-[2%] top-[22%] hidden w-[156px] md:block xl:right-[4%] xl:top-[18%] xl:w-[185px]"
       >
-        <div
-          className="motion-safe:animate-[ct-float_9s_ease-in-out_infinite]"
-          style={{ "--r": "5deg" } as React.CSSProperties}
-        >
-          <PinnedPhoto src={RIGHT_PHOTO} sizes="185px" rounded="rounded-3xl" tilt={5} />
+        <div style={{ transform: "rotate(5deg)" }}>
+          <PinnedPhoto src={RIGHT_PHOTO} sizes="400px" rounded="rounded-3xl" tilt={5} />
         </div>
       </motion.div>
     </>

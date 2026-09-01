@@ -1,43 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
-import {
-  ArrowRight,
-  MagnifyingGlass,
-  Scales,
-  CalendarCheck,
-  CheckCircle,
-} from "@phosphor-icons/react/dist/ssr";
+import { ArrowRight, CheckCircle } from "@phosphor-icons/react/dist/ssr";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
 import SearchPill from "@/components/SearchPill";
 import HeroTitle from "@/components/HeroTitle";
 import HeroPhotos from "@/components/HeroPhotos";
-import BrandPin from "@/components/BrandPin";
+import HowItWorksScene from "@/components/HowItWorksScene";
 import { categories, providerBandImage } from "@/lib/data";
 
 const popular = ["Botox", "Hydrafacial", "Laser Hair Removal", "IV Vitamin Therapy"];
-
-const howItWorks = [
-  {
-    icon: MagnifyingGlass,
-    pinTilt: -7,
-    title: "Search",
-    body: "Find what you need by service, provider, or location.",
-  },
-  {
-    icon: Scales,
-    pinTilt: 4,
-    title: "Compare",
-    body: "View services, prices, availability, and verified patient reviews side by side.",
-  },
-  {
-    icon: CalendarCheck,
-    pinTilt: -3,
-    title: "Book",
-    body: "Choose your care and schedule a time that works for you.",
-  },
-];
 
 const whyUse = [
   {
@@ -104,7 +77,7 @@ export default function Home() {
                     src={c.image}
                     alt={c.name}
                     fill
-                    sizes="(max-width: 768px) 70vw, 25vw"
+                    sizes="(max-width: 768px) 84vw, 30vw"
                     className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
                   />
                   <span className="glass-sheen" aria-hidden />
@@ -125,27 +98,8 @@ export default function Home() {
               How CareTrove Works
             </h2>
           </Reveal>
-          <Reveal className="scrollbar-none mt-10 flex snap-x snap-proximity gap-5 overflow-x-auto overscroll-x-contain px-1 pb-2 pt-4 md:grid md:grid-cols-3 md:overflow-visible">
-            {howItWorks.map((step) => (
-              <div
-                key={step.title}
-                className="relative min-w-[260px] snap-start rounded-2xl bg-white p-7 shadow-[0_10px_30px_-18px_rgba(28,25,23,0.25)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_24px_50px_-20px_rgba(28,25,23,0.35)] md:min-w-0"
-              >
-                <span
-                  className="absolute -top-5 left-7 block w-[26px]"
-                  style={{ transform: `rotate(${step.pinTilt}deg)` }}
-                >
-                  <BrandPin className="h-auto w-full" />
-                </span>
-                <span className="flex size-12 items-center justify-center rounded-full bg-gradient-to-br from-[#F67E50] via-[#F15A25] to-[#D14A1A] text-white shadow-[0_8px_20px_-8px_rgba(241,90,37,0.6)]">
-                  <step.icon size={22} weight="bold" />
-                </span>
-                <h3 className="mt-4 text-[17px] font-bold">{step.title}</h3>
-                <p className="mt-1.5 text-[14.5px] leading-relaxed text-stone-500">
-                  {step.body}
-                </p>
-              </div>
-            ))}
+          <Reveal className="mt-10">
+            <HowItWorksScene />
           </Reveal>
         </div>
       </section>
@@ -163,7 +117,7 @@ export default function Home() {
               src="/images/why-use.jpg"
               alt="A therapist giving a warm oil massage"
               fill
-              sizes="(max-width: 768px) 100vw, 50vw"
+              sizes="(max-width: 768px) 100vw, 70vw"
               className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
             />
             <span className="glass-sheen" aria-hidden />
