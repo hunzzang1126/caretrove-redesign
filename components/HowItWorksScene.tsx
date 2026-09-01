@@ -12,9 +12,10 @@ import {
 import { MagnifyingGlass, Scales, CalendarCheck } from "@phosphor-icons/react";
 
 /* RECOSM pillars-scene, rebuilt for CareTrove: diagonal ellipse photo with
-   internal parallax, cards drifting past it at different scrub speeds, a
-   hand-drawn arrow that draws itself in, and a circular photo accent.
-   Transform-only choreography — everything is visible before JS runs. */
+   internal parallax, and the three steps arriving IN ORDER as you scroll —
+   each card rises from below the fold, lands at its anchor, then keeps a
+   slow drift. Transform-only choreography: with JS off, every card simply
+   sits at its anchor, fully visible. */
 
 const steps = [
   {
@@ -34,31 +35,40 @@ const steps = [
   },
 ];
 
-const CARD_POS = [
-  "md:left-[4%] md:top-[16%]",
-  "md:right-[4%] md:top-[4%]",
-  "md:right-[15%] md:bottom-[2%]",
+/* anchor position, resting tilt, and the scroll window where each card lands */
+const CARDS = [
+  { pos: "md:left-[3%] md:top-[13%]", tilt: "md:-rotate-2", land: 0.3, from: 420 },
+  { pos: "md:right-[3%] md:top-[2%]", tilt: "md:rotate-[1.5deg]", land: 0.44, from: 560 },
+  { pos: "md:right-[13%] md:-bottom-[1%]", tilt: "md:-rotate-1", land: 0.58, from: 700 },
 ];
 
 function StepCard({
   step,
   pos,
+  tilt,
   y,
+  scale,
+  opacity,
 }: {
   step: (typeof steps)[number];
   pos: string;
+  tilt: string;
   y: MotionValue<number> | 0;
+  scale: MotionValue<number> | 1;
+  opacity: MotionValue<number> | 1;
 }) {
   return (
     <motion.div
-      style={y === 0 ? undefined : { y }}
-      className={`rounded-2xl bg-white px-6 py-7 text-center shadow-[0_18px_50px_-24px_rgba(28,25,23,0.35)] md:absolute md:w-[260px] ${pos}`}
+      style={y === 0 ? undefined : { y, scale, opacity }}
+      className={`relative rounded-3xl bg-white px-8 py-9 text-center shadow-[0_28px_70px_-28px_rgba(28,25,23,0.45)] md:absolute md:w-[300px] xl:w-[345px] ${pos} ${tilt}`}
     >
-      <span className="mx-auto flex size-[64px] items-center justify-center rounded-full bg-gradient-to-br from-[#F67E50] via-[#F15A25] to-[#D14A1A] text-white shadow-[0_10px_24px_-10px_rgba(241,90,37,0.65)]">
-        <step.icon size={26} weight="bold" />
+      <span className="mx-auto flex size-[72px] items-center justify-center rounded-full bg-gradient-to-br from-[#F67E50] via-[#F15A25] to-[#D14A1A] text-white shadow-[0_12px_28px_-10px_rgba(241,90,37,0.7)]">
+        <step.icon size={30} weight="bold" />
       </span>
-      <h3 className="mt-4 text-[16.5px] font-bold">{step.title}</h3>
-      <p className="mt-2 text-[13.5px] leading-relaxed text-stone-500">
+      <h3 className="mt-5 text-[19px] font-extrabold tracking-tight xl:text-[21px]">
+        {step.title}
+      </h3>
+      <p className="mt-2 text-[14px] leading-relaxed text-stone-500 xl:text-[14.5px]">
         {step.body}
       </p>
     </motion.div>
@@ -87,11 +97,21 @@ export default function HowItWorksScene() {
   });
 
   const imgY = useTransform(scrollYProgress, [0, 1], ["-9%", "9%"]);
-  const y1 = useTransform(scrollYProgress, [0, 1], [210, -100]);
-  const y2 = useTransform(scrollYProgress, [0, 1], [350, -170]);
-  const y3 = useTransform(scrollYProgress, [0, 1], [490, -240]);
-  const dash = useTransform(scrollYProgress, [0.08, 0.4], [arrowLen, 0]);
-  const ys = [y1, y2, y3];
+
+  /* Sequential arrivals: rise from far below, land at the anchor, keep drifting */
+  const y0 = useTransform(scrollYProgress, [0, CARDS[0].land, 1], [CARDS[0].from, 0, -110]);
+  const y1 = useTransform(scrollYProgress, [0.06, CARDS[1].land, 1], [CARDS[1].from, 0, -90]);
+  const y2 = useTransform(scrollYProgress, [0.14, CARDS[2].land, 1], [CARDS[2].from, 0, -70]);
+  const s0 = useTransform(scrollYProgress, [0, CARDS[0].land], [0.85, 1]);
+  const s1 = useTransform(scrollYProgress, [0.06, CARDS[1].land], [0.85, 1]);
+  const s2 = useTransform(scrollYProgress, [0.14, CARDS[2].land], [0.85, 1]);
+  const o0 = useTransform(scrollYProgress, [0.02, 0.18], [0, 1]);
+  const o1 = useTransform(scrollYProgress, [0.12, 0.3], [0, 1]);
+  const o2 = useTransform(scrollYProgress, [0.24, 0.44], [0, 1]);
+  const dash = useTransform(scrollYProgress, [0.12, 0.42], [arrowLen, 0]);
+  const ys = [y0, y1, y2];
+  const ss = [s0, s1, s2];
+  const os = [o0, o1, o2];
   const active = desktop && !reduce;
 
   return (
@@ -102,10 +122,10 @@ export default function HowItWorksScene() {
 
       <div
         ref={ref}
-        className="relative mt-8 max-md:flex max-md:flex-col max-md:gap-4 md:mt-14 md:h-[820px] xl:h-[980px]"
+        className="relative mt-8 max-md:flex max-md:flex-col max-md:gap-4 md:mt-14 md:h-[900px] xl:h-[1040px]"
       >
         {/* Diagonal ellipse photo */}
-        <div className="relative -rotate-[14deg] scale-[1.04] overflow-hidden rounded-[50%] max-md:my-8 max-md:aspect-[1.55/1] max-md:w-full md:absolute md:left-1/2 md:top-1/2 md:aspect-[1.55/1] md:w-[820px] xl:w-[1040px] md:-translate-x-1/2 md:-translate-y-1/2 md:rotate-[-28deg] md:scale-100">
+        <div className="relative -rotate-[14deg] scale-[1.04] overflow-hidden rounded-[50%] max-md:my-8 max-md:aspect-[1.55/1] max-md:w-full md:absolute md:left-1/2 md:top-1/2 md:aspect-[1.55/1] md:w-[820px] md:-translate-x-1/2 md:-translate-y-1/2 md:rotate-[-28deg] md:scale-100 xl:w-[1040px]">
           <div className="absolute left-1/2 top-1/2 h-[172%] w-[118%] -translate-x-1/2 -translate-y-1/2 rotate-[14deg] md:rotate-[28deg]">
             <motion.div
               style={active ? { y: imgY } : undefined}
@@ -127,7 +147,7 @@ export default function HowItWorksScene() {
           viewBox="0 0 220 140"
           fill="none"
           aria-hidden
-          className="absolute right-[4%] top-[6%] w-[140px] xl:w-[200px] text-ink opacity-75 md:right-[12%] md:top-[3%]"
+          className="absolute right-[4%] top-[6%] w-[140px] text-ink opacity-75 md:right-[12%] md:top-[3%] xl:w-[200px]"
         >
           <motion.path
             ref={arrowRef}
@@ -148,7 +168,7 @@ export default function HowItWorksScene() {
         </svg>
 
         {/* Circular photo accent */}
-        <div className="absolute bottom-[7%] left-[14%] hidden aspect-square w-[110px] xl:w-[150px] overflow-hidden rounded-full shadow-[0_16px_40px_-16px_rgba(28,25,23,0.4)] md:block">
+        <div className="absolute bottom-[7%] left-[13%] hidden aspect-square w-[110px] overflow-hidden rounded-full shadow-[0_16px_40px_-16px_rgba(28,25,23,0.4)] md:block xl:w-[150px]">
           <Image
             src="/images/hero-right.jpg"
             alt=""
@@ -163,8 +183,11 @@ export default function HowItWorksScene() {
           <StepCard
             key={step.title}
             step={step}
-            pos={CARD_POS[i]}
+            pos={CARDS[i].pos}
+            tilt={CARDS[i].tilt}
             y={active ? ys[i] : 0}
+            scale={active ? ss[i] : 1}
+            opacity={active ? os[i] : 1}
           />
         ))}
       </div>
