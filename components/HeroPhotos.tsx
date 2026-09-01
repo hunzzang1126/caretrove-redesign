@@ -26,7 +26,7 @@ const LEFT_CARDS: FanCard[] = [
   {
     src: "/images/hero-left.jpg",
     alt: "",
-    pos: "left-0 top-0 w-[150px] xl:w-[192px]",
+    pos: "left-0 top-0 w-[112px] 2xl:w-[192px]",
     rotate: "-9deg",
     fromX: "52px",
     delay: 0.1,
@@ -36,7 +36,7 @@ const LEFT_CARDS: FanCard[] = [
   {
     src: "/images/cat-cosmetic.jpg",
     alt: "",
-    pos: "left-[108px] top-[104px] w-[140px] xl:left-[138px] xl:top-[118px] xl:w-[178px]",
+    pos: "left-[72px] top-[96px] w-[100px] 2xl:left-[138px] 2xl:top-[118px] 2xl:w-[178px]",
     rotate: "5deg",
     fromX: "26px",
     delay: 0.26,
@@ -46,7 +46,7 @@ const LEFT_CARDS: FanCard[] = [
   {
     src: "/images/cat-preventative.jpg",
     alt: "",
-    pos: "left-[16px] top-[236px] w-[146px] xl:top-[270px] xl:w-[186px]",
+    pos: "left-[4px] top-[205px] w-[100px] 2xl:left-[16px] 2xl:top-[270px] 2xl:w-[186px]",
     rotate: "-4deg",
     fromX: "44px",
     delay: 0.42,
@@ -59,7 +59,7 @@ const RIGHT_CARDS: FanCard[] = [
   {
     src: "/images/hero-right.jpg",
     alt: "",
-    pos: "right-0 top-0 w-[150px] xl:w-[192px]",
+    pos: "right-0 top-0 w-[112px] 2xl:w-[192px]",
     rotate: "8deg",
     fromX: "-52px",
     delay: 0.18,
@@ -69,7 +69,7 @@ const RIGHT_CARDS: FanCard[] = [
   {
     src: "/images/why-use-desk.jpg",
     alt: "",
-    pos: "right-[108px] top-[104px] w-[140px] xl:right-[138px] xl:top-[118px] xl:w-[178px]",
+    pos: "right-[72px] top-[96px] w-[100px] 2xl:right-[138px] 2xl:top-[118px] 2xl:w-[178px]",
     rotate: "-5deg",
     fromX: "-26px",
     delay: 0.34,
@@ -79,7 +79,7 @@ const RIGHT_CARDS: FanCard[] = [
   {
     src: "/images/cat-diagnostic.jpg",
     alt: "",
-    pos: "right-[16px] top-[236px] w-[146px] xl:top-[270px] xl:w-[186px]",
+    pos: "right-[4px] top-[205px] w-[100px] 2xl:right-[16px] 2xl:top-[270px] 2xl:w-[186px]",
     rotate: "3deg",
     fromX: "-44px",
     delay: 0.5,
@@ -90,7 +90,7 @@ const RIGHT_CARDS: FanCard[] = [
 
 function Fan({ cards }: { cards: FanCard[] }) {
   return (
-    <div className="relative h-[440px] w-[260px] xl:h-[520px] xl:w-[330px]">
+    <div className="relative h-[340px] w-[195px] 2xl:h-[520px] 2xl:w-[330px]">
       {cards.map((c) => (
         <div key={c.src} className={`absolute ${c.pos}`} style={{ zIndex: c.z }}>
           <div
@@ -133,7 +133,7 @@ export default function HeroPhotos() {
       <motion.div
         aria-hidden
         style={reduce ? undefined : { y: ySlow }}
-        className="pointer-events-none absolute left-[1.5%] top-[7%] hidden md:block xl:left-[3%]"
+        className="pointer-events-none absolute left-[1.5%] top-[7%] hidden lg:block 2xl:left-[3%]"
       >
         <Fan cards={LEFT_CARDS} />
       </motion.div>
@@ -141,7 +141,7 @@ export default function HeroPhotos() {
       <motion.div
         aria-hidden
         style={reduce ? undefined : { y: yFast }}
-        className="pointer-events-none absolute right-[1.5%] top-[10%] hidden md:block xl:right-[3%]"
+        className="pointer-events-none absolute right-[1.5%] top-[7%] 2xl:top-[10%] hidden lg:block 2xl:right-[3%]"
       >
         <Fan cards={RIGHT_CARDS} />
       </motion.div>
