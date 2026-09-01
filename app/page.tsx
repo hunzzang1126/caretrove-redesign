@@ -91,14 +91,9 @@ export default function Home() {
       </section>
 
       {/* How CareTrove Works */}
-      <section className="topo-pattern bg-cream">
+      <section className="topo-pattern overflow-hidden bg-cream">
         <div className="mx-auto max-w-[1500px] px-5 py-16 md:px-10 md:py-24">
           <Reveal>
-            <h2 className="font-display text-3xl font-extrabold tracking-tight md:text-4xl">
-              How CareTrove Works
-            </h2>
-          </Reveal>
-          <Reveal className="mt-10">
             <HowItWorksScene />
           </Reveal>
         </div>
