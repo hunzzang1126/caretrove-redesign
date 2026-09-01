@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { Star, SealCheck, X } from "@phosphor-icons/react";
 
 export type Review = {
@@ -249,8 +250,9 @@ export default function ReviewsSection({
         ))}
       </div>
 
-      {open && (
-        <WriteReviewModal
+      {open &&
+        createPortal(
+          <WriteReviewModal
           clinicName={clinicName}
           onClose={() => setOpen(false)}
           onSubmit={(r) => {
@@ -272,8 +274,9 @@ export default function ReviewsSection({
             }
             setOpen(false);
           }}
-        />
-      )}
+          />,
+          document.body
+        )}
     </section>
   );
 }
