@@ -121,11 +121,11 @@ export default function Home() {
           >
             <div className="ring-shimmer group relative aspect-[4/3] overflow-hidden rounded-3xl bg-stone-100 md:aspect-[4/5]">
               <Image
-                src="/images/why-use.jpg"
-                alt="A therapist giving a warm oil massage"
+                src="/images/why-use-desk.jpg"
+                alt="A receptionist checking availability on a tablet at a spa front desk"
                 fill
                 sizes="(max-width: 768px) 100vw, 48vw"
-                className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+                className="object-cover object-[47%_30%] transition-transform duration-700 ease-out group-hover:scale-[1.04]"
               />
               <span className="glass-sheen" aria-hidden />
               <div className="glass-deep absolute inset-x-4 bottom-4 flex items-center gap-3 rounded-xl px-4 py-3.5 md:inset-x-5 md:bottom-5">
