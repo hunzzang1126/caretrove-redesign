@@ -133,7 +133,7 @@ export default function HeroPhotos() {
       <motion.div
         aria-hidden
         style={reduce ? undefined : { y: ySlow }}
-        className="pointer-events-none absolute left-[1.5%] top-[7%] hidden lg:block 2xl:left-[3%]"
+        className="pointer-events-none absolute top-[7%] hidden min-[1120px]:block left-[min(1.5vw,calc(50%-615px))] 2xl:left-[min(3vw,calc(50%-750px))]"
       >
         <Fan cards={LEFT_CARDS} />
       </motion.div>
@@ -141,7 +141,7 @@ export default function HeroPhotos() {
       <motion.div
         aria-hidden
         style={reduce ? undefined : { y: yFast }}
-        className="pointer-events-none absolute right-[1.5%] top-[7%] 2xl:top-[10%] hidden lg:block 2xl:right-[3%]"
+        className="pointer-events-none absolute top-[7%] 2xl:top-[10%] hidden min-[1120px]:block right-[min(1.5vw,calc(50%-615px))] 2xl:right-[min(3vw,calc(50%-750px))]"
       >
         <Fan cards={RIGHT_CARDS} />
       </motion.div>
