@@ -2,85 +2,149 @@
 
 import Image from "next/image";
 import { motion, useScroll, useTransform, useReducedMotion } from "motion/react";
-import BrandPin from "@/components/BrandPin";
 
-const LEFT_PHOTO = "/images/hero-left.jpg";
-const RIGHT_PHOTO = "/images/hero-right.jpg";
+/* Fanned photo stacks on both sides of the hero: three cards per side
+   showing a variety of services, each fanning out into place on load.
+   The fan-in is a pure CSS keyframe (ct-fan) so first paint never
+   depends on JS; scroll parallax is a progressive enhancement on top. */
 
-function PinnedPhoto({
-  src,
-  sizes,
-  rounded = "rounded-2xl",
-  tilt = 0,
-}: {
+type FanCard = {
   src: string;
-  sizes: string;
-  rounded?: string;
-  /* photo tilt in degrees; the pin counter-rotates to stay upright */
-  tilt?: number;
-}) {
+  alt: string;
+  /* outer anchor within the group */
+  pos: string;
+  /* final resting rotation */
+  rotate: string;
+  /* where the card fans in from (toward the center of the page) */
+  fromX: string;
+  delay: number;
+  z: number;
+  aspect: string;
+};
+
+const LEFT_CARDS: FanCard[] = [
+  {
+    src: "/images/hero-left.jpg",
+    alt: "",
+    pos: "left-0 top-0 w-[150px] xl:w-[192px]",
+    rotate: "-9deg",
+    fromX: "52px",
+    delay: 0.1,
+    z: 1,
+    aspect: "aspect-[4/5]",
+  },
+  {
+    src: "/images/cat-cosmetic.jpg",
+    alt: "",
+    pos: "left-[108px] top-[104px] w-[140px] xl:left-[138px] xl:top-[118px] xl:w-[178px]",
+    rotate: "5deg",
+    fromX: "26px",
+    delay: 0.26,
+    z: 3,
+    aspect: "aspect-[3/4]",
+  },
+  {
+    src: "/images/cat-preventative.jpg",
+    alt: "",
+    pos: "left-[16px] top-[236px] w-[146px] xl:top-[270px] xl:w-[186px]",
+    rotate: "-4deg",
+    fromX: "44px",
+    delay: 0.42,
+    z: 2,
+    aspect: "aspect-[4/5]",
+  },
+];
+
+const RIGHT_CARDS: FanCard[] = [
+  {
+    src: "/images/hero-right.jpg",
+    alt: "",
+    pos: "right-0 top-0 w-[150px] xl:w-[192px]",
+    rotate: "8deg",
+    fromX: "-52px",
+    delay: 0.18,
+    z: 1,
+    aspect: "aspect-[4/5]",
+  },
+  {
+    src: "/images/why-use-desk.jpg",
+    alt: "",
+    pos: "right-[108px] top-[104px] w-[140px] xl:right-[138px] xl:top-[118px] xl:w-[178px]",
+    rotate: "-5deg",
+    fromX: "-26px",
+    delay: 0.34,
+    z: 3,
+    aspect: "aspect-[3/4]",
+  },
+  {
+    src: "/images/cat-diagnostic.jpg",
+    alt: "",
+    pos: "right-[16px] top-[236px] w-[146px] xl:top-[270px] xl:w-[186px]",
+    rotate: "3deg",
+    fromX: "-44px",
+    delay: 0.5,
+    z: 2,
+    aspect: "aspect-[4/5]",
+  },
+];
+
+function Fan({ cards }: { cards: FanCard[] }) {
   return (
-    <div className="relative">
-      <span
-        className="absolute -top-5 left-1/2 z-10 block w-[27px] -translate-x-1/2"
-        style={{ transform: `translateX(-50%) rotate(${-tilt}deg)` }}
-      >
-        <BrandPin className="h-auto w-full" />
-      </span>
-      <div
-        className={`relative aspect-[4/5] overflow-hidden ${rounded} shadow-[0_24px_50px_-18px_rgba(28,25,23,0.35)]`}
-      >
-        <Image src={src} alt="" fill sizes={sizes} className="object-cover" />
-        <span className="glass-sheen" aria-hidden />
-      </div>
+    <div className="relative h-[440px] w-[260px] xl:h-[520px] xl:w-[330px]">
+      {cards.map((c) => (
+        <div key={c.src} className={`absolute ${c.pos}`} style={{ zIndex: c.z }}>
+          <div
+            className="motion-safe:animate-[ct-fan_0.8s_cubic-bezier(0.16,1,0.3,1)_both]"
+            style={
+              {
+                "--fan-r": c.rotate,
+                "--fan-x": c.fromX,
+                animationDelay: `${c.delay}s`,
+              } as React.CSSProperties
+            }
+          >
+            <div
+              className={`relative ${c.aspect} overflow-hidden rounded-2xl bg-stone-100 shadow-[0_22px_45px_-20px_rgba(28,25,23,0.4)]`}
+            >
+              <Image
+                src={c.src}
+                alt={c.alt}
+                fill
+                sizes="360px"
+                className="object-cover"
+              />
+              <span className="glass-sheen" aria-hidden />
+            </div>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
 
-/* Desktop: floating pinned snapshots with scroll parallax. The outer motion.div
-   owns the parallax translate; the inner wrapper owns idle float + tilt. */
 export default function HeroPhotos() {
   const reduce = useReducedMotion();
   const { scrollY } = useScroll();
-  const ySlow = useTransform(scrollY, [0, 640], [0, 150]);
-  const yFast = useTransform(scrollY, [0, 640], [0, 70]);
+  const ySlow = useTransform(scrollY, [0, 640], [0, 130]);
+  const yFast = useTransform(scrollY, [0, 640], [0, 60]);
 
   return (
     <>
       <motion.div
         aria-hidden
         style={reduce ? undefined : { y: ySlow }}
-        className="pointer-events-none absolute left-[2%] top-[16%] hidden w-[168px] md:block xl:left-[4%] xl:top-[14%] xl:w-[200px]"
+        className="pointer-events-none absolute left-[1.5%] top-[7%] hidden md:block xl:left-[3%]"
       >
-        <div style={{ transform: "rotate(-6deg)" }}>
-          <PinnedPhoto src={LEFT_PHOTO} sizes="400px" rounded="rounded-3xl" tilt={-6} />
-        </div>
+        <Fan cards={LEFT_CARDS} />
       </motion.div>
 
       <motion.div
         aria-hidden
         style={reduce ? undefined : { y: yFast }}
-        className="pointer-events-none absolute right-[2%] top-[22%] hidden w-[156px] md:block xl:right-[4%] xl:top-[18%] xl:w-[185px]"
+        className="pointer-events-none absolute right-[1.5%] top-[10%] hidden md:block xl:right-[3%]"
       >
-        <div style={{ transform: "rotate(5deg)" }}>
-          <PinnedPhoto src={RIGHT_PHOTO} sizes="400px" rounded="rounded-3xl" tilt={5} />
-        </div>
+        <Fan cards={RIGHT_CARDS} />
       </motion.div>
     </>
-  );
-}
-
-/* Mobile: a pinned-polaroid pair below the chips, in normal flow so it never
-   collides with the headline or the search pill. */
-export function MobilePhotoStrip() {
-  return (
-    <div aria-hidden className="mt-9 flex items-start justify-center md:hidden">
-      <div className="w-[124px] -rotate-6 translate-x-2">
-        <PinnedPhoto src={LEFT_PHOTO} sizes="124px" />
-      </div>
-      <div className="w-[118px] rotate-[5deg] -translate-x-2 translate-y-4">
-        <PinnedPhoto src={RIGHT_PHOTO} sizes="118px" />
-      </div>
-    </div>
   );
 }

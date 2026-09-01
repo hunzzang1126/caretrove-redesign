@@ -371,3 +371,15 @@ input:focus-visible {
 .maplibregl-ctrl-attrib {
   font-size: 10px;
 }
+
+/* Hero fan-in: cards spread out from the page center into their pose */
+@keyframes ct-fan {
+  from {
+    transform: translate3d(var(--fan-x, 0px), 28px, 0) rotate(0deg) scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: translate3d(0, 0, 0) rotate(var(--fan-r, 0deg)) scale(1);
+    opacity: 1;
+  }
+}
