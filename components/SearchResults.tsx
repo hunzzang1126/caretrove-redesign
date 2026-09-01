@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { ListBullets, MapTrifold } from "@phosphor-icons/react";
@@ -15,6 +16,8 @@ const ClinicMap = dynamic(() => import("@/components/ClinicMap"), {
 export default function SearchResults({ clinics }: { clinics: Clinic[] }) {
   const [hovered, setHovered] = useState<string | null>(null);
   const [mobileMap, setMobileMap] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   const markers = clinics.map((c) => ({
     slug: c.slug,
@@ -61,12 +64,15 @@ export default function SearchResults({ clinics }: { clinics: Clinic[] }) {
         ))}
       </div>
 
-      {/* Mobile full-screen map */}
-      {mobileMap && (
-        <div className="fixed inset-x-0 bottom-0 top-[72px] z-30 lg:hidden">
-          <ClinicMap markers={markers} hoveredSlug={hovered} className="size-full" />
-        </div>
-      )}
+      {/* Mobile full-screen map: portaled so no ancestor can trap the fixed overlay */}
+      {mounted &&
+        mobileMap &&
+        createPortal(
+          <div className="fixed inset-x-0 bottom-0 top-[72px] z-30 lg:hidden">
+            <ClinicMap markers={markers} hoveredSlug={hovered} className="size-full" />
+          </div>,
+          document.body
+        )}
 
       {/* Desktop sticky map */}
       <div className="hidden lg:block">
@@ -75,7 +81,9 @@ export default function SearchResults({ clinics }: { clinics: Clinic[] }) {
         </div>
       </div>
 
-      {/* Mobile toggle */}
+      {/* Mobile toggle: portaled for the same reason */}
+      {mounted &&
+        createPortal(
       <button
         type="button"
         onClick={() => setMobileMap((v) => !v)}
@@ -90,7 +98,9 @@ export default function SearchResults({ clinics }: { clinics: Clinic[] }) {
             <MapTrifold size={17} weight="bold" /> Map
           </>
         )}
-      </button>
+      </button>,
+          document.body
+        )}
     </div>
   );
 }
