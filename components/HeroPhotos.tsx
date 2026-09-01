@@ -51,11 +51,6 @@ export default function HeroPhotos() {
           style={{ "--r": "-6deg" } as React.CSSProperties}
         >
           <PinnedPhoto src={LEFT_PHOTO} sizes="200px" rounded="rounded-3xl" />
-          <div className="absolute -bottom-4 -right-8 glass-tint isolate flex items-center gap-1.5 rounded-full px-4 py-2.5">
-            <span className="text-[14px] font-extrabold">4.9</span>
-            <span className="flex items-center text-brand">★</span>
-            <span className="text-[12.5px] text-stone-500">Motor City MedSpa</span>
-          </div>
         </div>
       </motion.div>
 
@@ -69,11 +64,6 @@ export default function HeroPhotos() {
           style={{ "--r": "5deg" } as React.CSSProperties}
         >
           <PinnedPhoto src={RIGHT_PHOTO} sizes="185px" rounded="rounded-3xl" />
-          <div className="absolute -bottom-4 -left-10 glass-tint isolate flex items-center gap-1.5 rounded-full px-4 py-2.5">
-            <span className="text-[14px] font-extrabold">4.7</span>
-            <span className="flex items-center text-brand">★</span>
-            <span className="text-[12.5px] text-stone-500">191 verified reviews</span>
-          </div>
         </div>
       </motion.div>
     </>

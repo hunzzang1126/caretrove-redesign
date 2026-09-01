@@ -1,17 +1,61 @@
 import Image from "next/image";
-import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
+import {
+  ArrowRight,
+  MagnifyingGlass,
+  Scales,
+  CalendarCheck,
+  CheckCircle,
+} from "@phosphor-icons/react/dist/ssr";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
 import SearchPill from "@/components/SearchPill";
 import HeroTitle from "@/components/HeroTitle";
 import HeroPhotos from "@/components/HeroPhotos";
-import ClinicCard from "@/components/ClinicCard";
-import MichiganMap from "@/components/MichiganMap";
-import { categories, cities, clinics, providerBandImage } from "@/lib/data";
+import { categories, providerBandImage } from "@/lib/data";
 
-const popular = ["Botox", "HydraFacial", "Deep Tissue Massage", "IV Vitamin Therapy", "Laser Hair Removal"];
+const popular = ["Botox", "Hydrafacial", "Laser Hair Removal", "IV Vitamin Therapy"];
+
+const howItWorks = [
+  {
+    icon: MagnifyingGlass,
+    title: "Search",
+    body: "Find what you need by service, provider, or location.",
+  },
+  {
+    icon: Scales,
+    title: "Compare",
+    body: "View services, prices, availability, and verified patient reviews side by side.",
+  },
+  {
+    icon: CalendarCheck,
+    title: "Book",
+    body: "Choose your care and schedule a time that works for you.",
+  },
+];
+
+const whyUse = [
+  {
+    title: "Insurance doesn't cover everything",
+    body: "Many healthcare expenses fall outside of coverage. CareTrove helps you compare options and understand pricing before you book.",
+  },
+  {
+    title: "Make your HSA and FSA dollars go further",
+    body: "Browse services and compare prices to make the most of your healthcare spending accounts.",
+  },
+  {
+    title: "Give yourself more options",
+    body: "Discover more providers and services in one place, with prices you can compare side by side, without having to call each provider individually.",
+  },
+];
+
+const providerBullets = [
+  "List your practice for FREE",
+  "Registration reviewed within 24 hours",
+  "You control your listing",
+  "No cost to get started",
+];
 
 export default function Home() {
   return (
@@ -26,16 +70,12 @@ export default function Home() {
 
         <div className="relative mx-auto flex w-full max-w-[780px] flex-col items-center">
           <HeroTitle />
-          <Reveal delay={0.3}>
-            <p className="mx-auto mt-4 max-w-[30ch] text-balance text-center text-[15px] font-medium leading-snug text-stone-600 md:mt-5 md:max-w-none md:text-[17px]">
-              Verified clinics across Michigan, confirmed within 24 hours.
-            </p>
-          </Reveal>
-          <Reveal delay={0.25} className="mt-8 w-full">
+          <Reveal delay={0.2} className="mt-8 w-full">
             <SearchPill />
           </Reveal>
-          <Reveal delay={0.4}>
+          <Reveal delay={0.35}>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-2.5">
+              <span className="text-[13.5px] font-bold text-stone-500">Popular:</span>
               {popular.map((t) => (
                 <Link
                   key={t}
@@ -51,47 +91,11 @@ export default function Home() {
         <div id="hero-pill-sentinel" className="absolute bottom-0 h-px w-px" />
       </section>
 
-      {/* Featured clinics: inventory first */}
+      {/* Browse by Service */}
       <section className="mx-auto max-w-[1500px] px-5 py-16 md:px-10 md:py-20">
         <Reveal>
-          <div className="flex items-end justify-between">
-            <h2 className="font-display text-3xl font-extrabold tracking-tight md:text-4xl">
-              Featured in Michigan
-            </h2>
-            <Link
-              href="/search"
-              className="text-[15px] font-bold text-brand-text transition-colors hover:text-brand-deep"
-            >
-              View all
-            </Link>
-          </div>
-        </Reveal>
-        <Reveal className="scrollbar-none -mx-5 mt-6 flex snap-x snap-proximity gap-4 overflow-x-auto overscroll-x-contain scroll-pl-5 px-5 pb-2 sm:mx-0 sm:mt-8 sm:grid sm:snap-none sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3">
-          {clinics.map((clinic) => (
-            <div
-              key={clinic.slug}
-              className="w-[80%] shrink-0 snap-start sm:w-auto sm:shrink"
-            >
-              <ClinicCard clinic={clinic} />
-            </div>
-          ))}
-          <Link
-            href="/search"
-            className="flex w-[45%] shrink-0 snap-start flex-col items-center justify-center gap-3 sm:hidden"
-          >
-            <span className="flex size-12 items-center justify-center rounded-full bg-ink text-white transition-transform active:scale-95">
-              <ArrowRight size={20} weight="bold" />
-            </span>
-            <span className="text-[14px] font-bold">View all clinics</span>
-          </Link>
-        </Reveal>
-      </section>
-
-      {/* Treatments */}
-      <section className="mx-auto max-w-[1500px] px-5 pb-16 md:px-10 md:pb-20">
-        <Reveal>
           <h2 className="font-display text-3xl font-extrabold tracking-tight md:text-4xl">
-            Browse by treatment
+            Browse by Service
           </h2>
         </Reveal>
         <Reveal className="scrollbar-none mt-8 flex snap-x snap-proximity gap-5 overflow-x-auto overscroll-x-contain pb-2 md:grid md:grid-cols-4 md:overflow-visible">
@@ -116,44 +120,61 @@ export default function Home() {
         </Reveal>
       </section>
 
-      {/* Browse by city */}
+      {/* How CareTrove Works */}
       <section className="topo-pattern bg-cream">
-        <div className="mx-auto grid max-w-[1500px] items-center gap-10 px-5 py-16 md:grid-cols-[1fr_360px] md:px-10 md:py-24">
-          <div>
-            <Reveal>
-              <h2 className="font-display text-3xl font-extrabold tracking-tight md:text-4xl">
-                Browse by city
-              </h2>
-              <p className="mt-2 text-[16px] text-stone-500">
-                Every clinic on CareTrove is in Michigan.
-              </p>
-            </Reveal>
-            <div className="mt-8 grid gap-x-10 sm:grid-cols-2">
-              {cities.map((city, i) => (
-                <Reveal key={city.name} delay={i * 0.04}>
-                  <Link
-                    href={`/search?loc=${encodeURIComponent(city.name)}`}
-                    className="group flex items-baseline justify-between border-b border-stone-200 py-4 transition-colors hover:border-brand"
-                  >
-                    <span className="text-[17px] font-bold transition-colors group-hover:text-brand-text">
-                      {city.name}
-                    </span>
-                    <span className="text-[14px] text-stone-400">
-                      {city.count} clinics
-                    </span>
-                  </Link>
-                </Reveal>
-              ))}
-            </div>
-          </div>
-          <Reveal className="hidden md:block">
-            <MichiganMap className="mx-auto w-full max-w-[320px]" />
+        <div className="mx-auto max-w-[1500px] px-5 py-16 md:px-10 md:py-24">
+          <Reveal>
+            <h2 className="font-display text-3xl font-extrabold tracking-tight md:text-4xl">
+              How CareTrove Works
+            </h2>
+          </Reveal>
+          <Reveal className="scrollbar-none mt-8 flex snap-x snap-proximity gap-5 overflow-x-auto overscroll-x-contain pb-2 md:grid md:grid-cols-3 md:overflow-visible">
+            {howItWorks.map((step) => (
+              <div
+                key={step.title}
+                className="min-w-[260px] snap-start rounded-2xl bg-white p-7 shadow-[0_10px_30px_-18px_rgba(28,25,23,0.25)] md:min-w-0"
+              >
+                <span className="flex size-12 items-center justify-center rounded-xl bg-brand/10 text-brand-deep">
+                  <step.icon size={24} weight="bold" />
+                </span>
+                <h3 className="mt-4 text-[17px] font-bold">{step.title}</h3>
+                <p className="mt-1.5 text-[14.5px] leading-relaxed text-stone-500">
+                  {step.body}
+                </p>
+              </div>
+            ))}
           </Reveal>
         </div>
       </section>
 
-      {/* Provider band with glass panel */}
+      {/* Why Use CareTrove? */}
       <section className="mx-auto max-w-[1500px] px-5 py-16 md:px-10 md:py-24">
+        <Reveal>
+          <h2 className="font-display text-3xl font-extrabold tracking-tight md:text-4xl">
+            Why Use CareTrove?
+          </h2>
+        </Reveal>
+        <Reveal className="scrollbar-none mt-8 flex snap-x snap-proximity gap-5 overflow-x-auto overscroll-x-contain pb-2 md:grid md:grid-cols-3 md:overflow-visible">
+          {whyUse.map((item) => (
+            <div
+              key={item.title}
+              className="min-w-[280px] snap-start rounded-2xl bg-mist p-7 md:min-w-0"
+            >
+              <CheckCircle size={26} weight="fill" className="text-brand" />
+              <h3 className="mt-4 text-[17px] font-bold leading-snug">{item.title}</h3>
+              <p className="mt-1.5 text-[14.5px] leading-relaxed text-stone-500">
+                {item.body}
+              </p>
+            </div>
+          ))}
+        </Reveal>
+      </section>
+
+      {/* Provider band */}
+      <section
+        id="for-providers"
+        className="mx-auto max-w-[1500px] scroll-mt-20 px-5 pb-16 md:px-10 md:pb-24"
+      >
         <Reveal>
           <div className="relative overflow-hidden rounded-3xl">
             <Image
@@ -162,22 +183,31 @@ export default function Home() {
               width={2000}
               height={900}
               sizes="(max-width: 1500px) 100vw, 1500px"
-              className="h-[440px] w-full object-cover md:h-[500px]"
+              className="h-[540px] w-full object-cover md:h-[560px]"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/10 to-transparent" />
-            <div className="glass-deep absolute inset-x-5 bottom-5 rounded-2xl p-7 md:inset-x-auto md:bottom-10 md:left-10 md:max-w-[460px] md:p-9">
-              <h2 className="font-display text-3xl font-extrabold leading-tight tracking-tight text-white md:text-4xl">
-                Run a clinic? Get discovered.
+            <div className="glass-deep absolute inset-x-5 bottom-5 rounded-2xl p-7 md:inset-x-auto md:bottom-10 md:left-10 md:max-w-[500px] md:p-9">
+              <h2 className="font-display text-[24px] font-extrabold leading-tight tracking-tight text-white md:text-3xl">
+                Run a healthcare or wellness practice? Get discovered on
+                CareTrove.
               </h2>
-              <p className="mt-3 text-[15px] leading-relaxed text-white/85">
-                Free listing during launch. You control your services, hours,
-                and team.
-              </p>
+              <ul className="mt-4 space-y-2">
+                {providerBullets.map((b) => (
+                  <li
+                    key={b}
+                    className="flex items-center gap-2.5 text-[14.5px] font-semibold text-white/90"
+                  >
+                    <CheckCircle size={17} weight="fill" className="shrink-0 text-brand" />
+                    {b}
+                  </li>
+                ))}
+              </ul>
               <Link
                 href="/search"
-                className="mt-6 inline-block rounded-xl bg-white px-6 py-3.5 text-[15px] font-bold text-ink transition-all hover:shadow-lg active:scale-[0.98]"
+                className="mt-6 inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3.5 text-[15px] font-bold text-ink transition-all hover:shadow-lg active:scale-[0.98]"
               >
-                List your clinic
+                Register your practice
+                <ArrowRight size={16} weight="bold" />
               </Link>
             </div>
           </div>
