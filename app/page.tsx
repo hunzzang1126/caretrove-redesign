@@ -135,11 +135,7 @@ export default function Home() {
                   className="absolute -top-5 left-7 block w-[26px]"
                   style={{ transform: `rotate(${step.pinTilt}deg)` }}
                 >
-                  <BrandPin className="h-auto w-full [filter:drop-shadow(0_1px_2px_rgba(28,25,23,0.45))_drop-shadow(0_8px_14px_rgba(28,25,23,0.22))]" />
-                  <span
-                    aria-hidden
-                    className="absolute left-1/2 top-[calc(100%-4px)] h-[5px] w-[12px] -translate-x-1/2 rounded-full bg-ink/20 blur-[2px]"
-                  />
+                  <BrandPin className="h-auto w-full" />
                 </span>
                 <span className="flex size-12 items-center justify-center rounded-full bg-gradient-to-br from-[#F67E50] via-[#F15A25] to-[#D14A1A] text-white shadow-[0_8px_20px_-8px_rgba(241,90,37,0.6)]">
                   <step.icon size={22} weight="bold" />

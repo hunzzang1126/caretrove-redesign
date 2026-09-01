@@ -27,11 +27,7 @@ function PinnedPhoto({
         className="absolute -top-5 left-1/2 z-10 block w-[27px] -translate-x-1/2"
         style={{ transform: `translateX(-50%) rotate(${-tilt}deg)` }}
       >
-        <BrandPin className="h-auto w-full drop-shadow-[0_1px_2px_rgba(28,25,23,0.45)] [filter:drop-shadow(0_1px_2px_rgba(28,25,23,0.45))_drop-shadow(0_8px_14px_rgba(28,25,23,0.25))]" />
-        <span
-          aria-hidden
-          className="absolute left-1/2 top-[calc(100%-4px)] h-[5px] w-[12px] -translate-x-1/2 rounded-full bg-ink/25 blur-[2px]"
-        />
+        <BrandPin className="h-auto w-full" />
       </span>
       <div
         className={`relative aspect-[4/5] overflow-hidden ${rounded} shadow-[0_24px_50px_-18px_rgba(28,25,23,0.35)]`}
