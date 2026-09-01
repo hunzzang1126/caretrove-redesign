@@ -215,10 +215,13 @@ const isMobileViewport = () =>
 
 export default function SearchPill({
   compact = false,
+  iconOnly = false,
   defaultQuery = "",
   defaultLocation = "",
 }: {
   compact?: boolean;
+  /* iconOnly: just the round mobile search button that opens the sheet */
+  iconOnly?: boolean;
   defaultQuery?: string;
   defaultLocation?: string;
 }) {
@@ -543,6 +546,22 @@ export default function SearchPill({
   const sheetNode =
     mounted && sheet ? createPortal(sheetInner, document.body) : null;
 
+  if (iconOnly) {
+    return (
+      <>
+        <button
+          type="button"
+          aria-label="Search"
+          onClick={() => openSheet("q")}
+          className="flex size-10 items-center justify-center rounded-full border border-stone-200 bg-white text-ink shadow-sm transition-all active:scale-95"
+        >
+          <MagnifyingGlass size={17} weight="bold" />
+        </button>
+        {sheetNode}
+      </>
+    );
+  }
+
   if (compact) {
     return (
       <>
@@ -616,15 +635,6 @@ export default function SearchPill({
           )}
         </form>
 
-        {/* Mobile: the compact pill becomes a sheet launcher */}
-        <button
-          type="button"
-          onClick={() => openSheet("q")}
-          className="flex h-11 items-center gap-2 rounded-full border border-stone-200 bg-white px-4 text-[14px] font-bold shadow-[0_6px_20px_-8px_rgba(28,25,23,0.25)] transition-all active:scale-[0.97] md:hidden"
-        >
-          <MagnifyingGlass size={15} weight="bold" className="text-brand" />
-          Search
-        </button>
         {sheetNode}
       </>
     );
