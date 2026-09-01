@@ -20,7 +20,7 @@ function PinnedPhoto({
 }) {
   return (
     <div className="relative">
-      <BrandPin className="absolute -top-3 left-1/2 z-10 w-[22px] -translate-x-1/2 drop-shadow-[0_3px_4px_rgba(28,25,23,0.3)]" />
+      <BrandPin className="absolute -top-4 left-1/2 z-10 h-auto w-[19px] -translate-x-1/2 drop-shadow-[0_3px_4px_rgba(28,25,23,0.3)]" />
       <div
         className={`relative aspect-[4/5] overflow-hidden ${rounded} shadow-[0_24px_50px_-18px_rgba(28,25,23,0.35)]`}
       >

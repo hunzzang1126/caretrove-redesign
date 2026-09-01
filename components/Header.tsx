@@ -37,7 +37,7 @@ export default function Header({ pillOnScroll = false }: { pillOnScroll?: boolea
           aria-label="CareTrove home"
           className="col-start-1 justify-self-start"
         >
-          <Image src="/logo.svg" alt="CareTrove" width={182} height={43} priority className="h-auto w-[148px] max-md:-translate-y-[2px] md:w-[182px]" />
+          <Image src="/logo.svg" alt="CareTrove" width={182} height={43} priority className="h-auto w-[128px] max-md:-translate-y-[2px] md:w-[182px]" />
         </Link>
 
         <div
@@ -51,12 +51,9 @@ export default function Header({ pillOnScroll = false }: { pillOnScroll?: boolea
         </div>
 
         <nav className="col-start-3 flex items-center gap-2 justify-self-end md:gap-2">
-          <span className="md:hidden">
-            <SearchPill iconOnly />
-          </span>
           <Link
             href="/#for-providers"
-            className="hidden rounded-full px-4 py-2 text-[15px] font-semibold text-ink transition-colors hover:bg-stone-100 lg:block"
+            className="whitespace-nowrap rounded-full px-2.5 py-2 text-[12.5px] font-semibold text-ink transition-colors hover:bg-stone-100 md:px-4 md:text-[15px]"
           >
             List Your Practice
           </Link>

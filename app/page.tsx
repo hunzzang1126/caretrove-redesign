@@ -13,6 +13,7 @@ import Reveal from "@/components/Reveal";
 import SearchPill from "@/components/SearchPill";
 import HeroTitle from "@/components/HeroTitle";
 import HeroPhotos from "@/components/HeroPhotos";
+import BrandPin from "@/components/BrandPin";
 import { categories, providerBandImage } from "@/lib/data";
 
 const popular = ["Botox", "Hydrafacial", "Laser Hair Removal", "IV Vitamin Therapy"];
@@ -48,13 +49,6 @@ const whyUse = [
     title: "Give yourself more options",
     body: "Discover more providers and services in one place, with prices you can compare side by side, without having to call each provider individually.",
   },
-];
-
-const providerBullets = [
-  "List your practice for FREE",
-  "Registration reviewed within 24 hours",
-  "You control your listing",
-  "No cost to get started",
 ];
 
 export default function Home() {
@@ -128,14 +122,15 @@ export default function Home() {
               How CareTrove Works
             </h2>
           </Reveal>
-          <Reveal className="scrollbar-none mt-8 flex snap-x snap-proximity gap-5 overflow-x-auto overscroll-x-contain pb-2 md:grid md:grid-cols-3 md:overflow-visible">
+          <Reveal className="scrollbar-none mt-10 flex snap-x snap-proximity gap-5 overflow-x-auto overscroll-x-contain px-1 pb-2 pt-4 md:grid md:grid-cols-3 md:overflow-visible">
             {howItWorks.map((step) => (
               <div
                 key={step.title}
-                className="min-w-[260px] snap-start rounded-2xl bg-white p-7 shadow-[0_10px_30px_-18px_rgba(28,25,23,0.25)] md:min-w-0"
+                className="relative min-w-[260px] snap-start rounded-2xl bg-white p-7 shadow-[0_10px_30px_-18px_rgba(28,25,23,0.25)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_24px_50px_-20px_rgba(28,25,23,0.35)] md:min-w-0"
               >
-                <span className="flex size-12 items-center justify-center rounded-xl bg-brand/10 text-brand-deep">
-                  <step.icon size={24} weight="bold" />
+                <BrandPin className="absolute -top-4 left-7 h-auto w-[20px] drop-shadow-[0_3px_4px_rgba(28,25,23,0.25)]" />
+                <span className="flex size-12 items-center justify-center rounded-full bg-gradient-to-br from-[#F67E50] via-[#F15A25] to-[#D14A1A] text-white shadow-[0_8px_20px_-8px_rgba(241,90,37,0.6)]">
+                  <step.icon size={22} weight="bold" />
                 </span>
                 <h3 className="mt-4 text-[17px] font-bold">{step.title}</h3>
                 <p className="mt-1.5 text-[14.5px] leading-relaxed text-stone-500">
@@ -154,19 +149,34 @@ export default function Home() {
             Why Use CareTrove?
           </h2>
         </Reveal>
-        <Reveal className="scrollbar-none mt-8 flex snap-x snap-proximity gap-5 overflow-x-auto overscroll-x-contain pb-2 md:grid md:grid-cols-3 md:overflow-visible">
-          {whyUse.map((item) => (
-            <div
-              key={item.title}
-              className="min-w-[280px] snap-start rounded-2xl bg-mist p-7 md:min-w-0"
-            >
-              <CheckCircle size={26} weight="fill" className="text-brand" />
-              <h3 className="mt-4 text-[17px] font-bold leading-snug">{item.title}</h3>
-              <p className="mt-1.5 text-[14.5px] leading-relaxed text-stone-500">
-                {item.body}
-              </p>
-            </div>
-          ))}
+        <Reveal className="mt-8 grid items-center gap-10 md:mt-10 md:grid-cols-2 md:gap-14">
+          <div className="ring-shimmer group relative aspect-[4/3] overflow-hidden rounded-3xl bg-stone-100">
+            <Image
+              src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=1400&q=80&auto=format&fit=crop"
+              alt="A therapist giving a warm oil massage"
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+            />
+            <span className="glass-sheen" aria-hidden />
+          </div>
+          <div className="divide-y divide-stone-100">
+            {whyUse.map((item) => (
+              <div key={item.title} className="flex gap-4 py-5 first:pt-0 last:pb-0">
+                <CheckCircle
+                  size={24}
+                  weight="fill"
+                  className="mt-0.5 shrink-0 text-brand"
+                />
+                <div>
+                  <h3 className="text-[16.5px] font-bold leading-snug">{item.title}</h3>
+                  <p className="mt-1 max-w-[52ch] text-[14.5px] leading-relaxed text-stone-500">
+                    {item.body}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
         </Reveal>
       </section>
 
@@ -191,16 +201,27 @@ export default function Home() {
                 Run a healthcare or wellness practice? Get discovered on
                 CareTrove.
               </h2>
-              <ul className="mt-4 space-y-2">
-                {providerBullets.map((b) => (
-                  <li
-                    key={b}
-                    className="flex items-center gap-2.5 text-[14.5px] font-semibold text-white/90"
-                  >
-                    <CheckCircle size={17} weight="fill" className="shrink-0 text-brand" />
-                    {b}
-                  </li>
-                ))}
+              <ul className="mt-4 space-y-2.5">
+                <li className="flex items-start gap-2.5 text-[14.5px] font-semibold leading-snug text-white/90">
+                  <CheckCircle size={17} weight="fill" className="mt-[2px] shrink-0 text-brand" />
+                  List your practice for FREE
+                </li>
+                <li className="flex items-start gap-2.5 text-[14.5px] font-semibold leading-snug text-white/90">
+                  <CheckCircle size={17} weight="fill" className="mt-[2px] shrink-0 text-brand" />
+                  <span>
+                    Registration reviewed within
+                    <br />
+                    24 hours
+                  </span>
+                </li>
+                <li className="flex items-start gap-2.5 text-[14.5px] font-semibold leading-snug text-white/90">
+                  <CheckCircle size={17} weight="fill" className="mt-[2px] shrink-0 text-brand" />
+                  You control your listing
+                </li>
+                <li className="flex items-start gap-2.5 text-[14.5px] font-semibold leading-snug text-white/90">
+                  <CheckCircle size={17} weight="fill" className="mt-[2px] shrink-0 text-brand" />
+                  No cost to get started
+                </li>
               </ul>
               <Link
                 href="/search"
