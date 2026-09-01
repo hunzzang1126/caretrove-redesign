@@ -8,6 +8,7 @@ import SearchPill from "@/components/SearchPill";
 import HeroTitle from "@/components/HeroTitle";
 import HeroPhotos from "@/components/HeroPhotos";
 import HowItWorksScene from "@/components/HowItWorksScene";
+import ScrollReveal from "@/components/ScrollReveal";
 import { categories, providerBandImage } from "@/lib/data";
 
 const popular = ["Botox", "Hydrafacial", "Laser Hair Removal", "IV Vitamin Therapy"];
@@ -15,14 +16,23 @@ const popular = ["Botox", "Hydrafacial", "Laser Hair Removal", "IV Vitamin Thera
 const whyUse = [
   {
     title: "Insurance doesn't cover everything",
+    pre: "Insurance doesn't cover ",
+    em: "everything",
+    post: "",
     body: "Many healthcare expenses fall outside of coverage. CareTrove helps you compare options and understand pricing before you book.",
   },
   {
     title: "Make your HSA and FSA dollars go further",
+    pre: "Make your HSA and FSA dollars go ",
+    em: "further",
+    post: "",
     body: "Browse services and compare prices to make the most of your healthcare spending accounts.",
   },
   {
     title: "Give yourself more options",
+    pre: "Give yourself ",
+    em: "more options",
+    post: "",
     body: "Discover more providers and services in one place, with prices you can compare side by side, without having to call each provider individually.",
   },
 ];
@@ -63,14 +73,19 @@ export default function Home() {
 
       {/* Browse by Service */}
       <section className="mx-auto max-w-[1500px] px-5 py-16 md:px-10 md:py-20">
-        <Reveal>
+        <ScrollReveal y={20}>
           <h2 className="font-display text-3xl font-extrabold tracking-tight md:text-4xl">
             Browse by Service
           </h2>
-        </Reveal>
-        <Reveal className="scrollbar-none mt-8 flex snap-x snap-proximity gap-5 overflow-x-auto overscroll-x-contain pb-2 md:grid md:grid-cols-4 md:overflow-visible">
-          {categories.map((c) => (
-            <div key={c.slug} className="min-w-[240px] snap-start md:min-w-0">
+        </ScrollReveal>
+        <div className="scrollbar-none mt-8 flex snap-x snap-proximity gap-5 overflow-x-auto overscroll-x-contain pb-2 md:grid md:grid-cols-4 md:overflow-visible">
+          {categories.map((c, i) => (
+            <ScrollReveal
+              key={c.slug}
+              delay={i * 0.08}
+              y={30}
+              className="min-w-[240px] snap-start md:min-w-0"
+            >
               <Link href={`/search?category=${c.slug}`} className="group block">
                 <div className="ring-shimmer relative aspect-[5/4] overflow-hidden rounded-2xl bg-stone-100">
                   <Image
@@ -85,56 +100,70 @@ export default function Home() {
                 <h3 className="mt-3 text-[16px] font-bold">{c.name}</h3>
                 <p className="text-[14px] text-stone-500">{c.blurb}</p>
               </Link>
-            </div>
+            </ScrollReveal>
           ))}
-        </Reveal>
+        </div>
       </section>
 
       {/* How CareTrove Works */}
       <section className="topo-pattern overflow-hidden bg-cream">
         <div className="mx-auto max-w-[1500px] px-5 py-16 md:px-10 md:py-24">
-          <Reveal>
-            <HowItWorksScene />
-          </Reveal>
+          <HowItWorksScene />
         </div>
       </section>
 
       {/* Why Use CareTrove? */}
       <section className="mx-auto max-w-[1500px] px-5 py-16 md:px-10 md:py-24">
-        <Reveal>
-          <h2 className="font-display text-3xl font-extrabold tracking-tight md:text-4xl">
-            Why Use CareTrove?
-          </h2>
-        </Reveal>
-        <Reveal className="mt-8 grid items-center gap-10 md:mt-10 md:grid-cols-2 md:gap-14">
-          <div className="ring-shimmer group relative aspect-[4/3] overflow-hidden rounded-3xl bg-stone-100">
-            <Image
-              src="/images/why-use.jpg"
-              alt="A therapist giving a warm oil massage"
-              fill
-              sizes="(max-width: 768px) 100vw, 70vw"
-              className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
-            />
-            <span className="glass-sheen" aria-hidden />
-          </div>
-          <div className="divide-y divide-stone-100">
-            {whyUse.map((item) => (
-              <div key={item.title} className="flex gap-4 py-5 first:pt-0 last:pb-0">
-                <CheckCircle
-                  size={24}
-                  weight="fill"
-                  className="mt-0.5 shrink-0 text-brand"
-                />
-                <div>
-                  <h3 className="text-[16.5px] font-bold leading-snug">{item.title}</h3>
-                  <p className="mt-1 max-w-[52ch] text-[14.5px] leading-relaxed text-stone-500">
+        <div className="grid gap-10 md:grid-cols-[0.95fr_1.05fr] md:gap-16">
+          <ScrollReveal
+            y={30}
+            className="relative self-start md:sticky md:top-[104px]"
+          >
+            <div className="ring-shimmer group relative aspect-[4/3] overflow-hidden rounded-3xl bg-stone-100 md:aspect-[4/5]">
+              <Image
+                src="/images/why-use.jpg"
+                alt="A therapist giving a warm oil massage"
+                fill
+                sizes="(max-width: 768px) 100vw, 48vw"
+                className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+              />
+              <span className="glass-sheen" aria-hidden />
+              <div className="glass-deep absolute inset-x-4 bottom-4 flex items-center gap-3 rounded-xl px-4 py-3.5 md:inset-x-5 md:bottom-5">
+                <CheckCircle size={20} weight="fill" className="shrink-0 text-brand" />
+                <p className="text-[13.5px] font-semibold leading-snug text-white">
+                  Real prices upfront, before you ever book.
+                </p>
+              </div>
+            </div>
+          </ScrollReveal>
+
+          <div className="md:pt-2">
+            <ScrollReveal y={20}>
+              <h2 className="font-display text-3xl font-extrabold tracking-tight md:text-4xl">
+                Why Use CareTrove?
+              </h2>
+            </ScrollReveal>
+            <div className="mt-2 md:mt-4">
+              {whyUse.map((item, i) => (
+                <ScrollReveal
+                  key={item.title}
+                  delay={i * 0.09}
+                  y={28}
+                  className="border-b border-stone-200/70 py-7 last:border-0 md:py-9"
+                >
+                  <h3 className="max-w-[24ch] font-display text-[23px] font-extrabold leading-[1.15] tracking-tight md:text-[29px]">
+                    {item.pre}
+                    <span className="italic text-brand-text">{item.em}</span>
+                    {item.post}
+                  </h3>
+                  <p className="mt-2.5 max-w-[56ch] text-[14.5px] leading-relaxed text-stone-500 md:text-[15px]">
                     {item.body}
                   </p>
-                </div>
-              </div>
-            ))}
+                </ScrollReveal>
+              ))}
+            </div>
           </div>
-        </Reveal>
+        </div>
       </section>
 
       {/* Provider band */}
@@ -142,7 +171,7 @@ export default function Home() {
         id="for-providers"
         className="mx-auto max-w-[1500px] scroll-mt-20 px-5 pb-16 md:px-10 md:pb-24"
       >
-        <Reveal>
+        <ScrollReveal y={34}>
           <div className="relative overflow-hidden rounded-3xl max-md:bg-[#211d1a]">
             <div className="relative">
               <Image
@@ -191,7 +220,7 @@ export default function Home() {
               </Link>
             </div>
           </div>
-        </Reveal>
+        </ScrollReveal>
       </section>
 
       <Footer />

@@ -37,7 +37,7 @@ export default function Header({ pillOnScroll = false }: { pillOnScroll?: boolea
           aria-label="CareTrove home"
           className="col-start-1 justify-self-start"
         >
-          <Image src="/logo.svg" alt="CareTrove" width={182} height={43} priority className="h-auto w-[146px] max-md:-translate-y-[2px] md:w-[182px]" />
+          <Image src="/logo.svg" alt="CareTrove" width={182} height={43} priority className="h-auto w-[146px] -translate-y-[4px] md:w-[182px] md:-translate-y-[5px]" />
         </Link>
 
         <div
@@ -53,13 +53,13 @@ export default function Header({ pillOnScroll = false }: { pillOnScroll?: boolea
         <nav className="col-start-3 flex items-center gap-0.5 justify-self-end md:gap-2">
           <Link
             href="/#for-providers"
-            className="whitespace-nowrap rounded-full px-1 py-2 text-[11.5px] font-semibold text-ink transition-colors hover:bg-stone-100 md:px-4 md:text-[15px]"
+            className="whitespace-nowrap rounded-full px-1 py-2 text-[11px] font-semibold text-ink transition-colors hover:bg-stone-100 md:px-4 md:text-[15px]"
           >
             List Your Practice
           </Link>
           <Link
             href="/search"
-            className="whitespace-nowrap rounded-full bg-ink px-2 py-2 text-[11.5px] font-bold text-white transition-colors hover:bg-stone-700 active:scale-[0.98] md:px-5 md:py-2.5 md:text-[15px]"
+            className="whitespace-nowrap rounded-full bg-ink px-2.5 py-[7px] text-[12px] font-bold text-white transition-colors hover:bg-stone-700 active:scale-[0.98] md:px-5 md:py-2.5 md:text-[15px]"
           >
             Login / Sign Up
           </Link>

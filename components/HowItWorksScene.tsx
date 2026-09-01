@@ -10,6 +10,7 @@ import {
   type MotionValue,
 } from "motion/react";
 import { MagnifyingGlass, Scales, CalendarCheck } from "@phosphor-icons/react";
+import ScrollReveal from "@/components/ScrollReveal";
 
 /* RECOSM pillars-scene, rebuilt for CareTrove: diagonal ellipse photo with
    internal parallax, and the three steps arriving IN ORDER as you scroll —
@@ -46,6 +47,7 @@ function StepCard({
   step,
   pos,
   tilt,
+  index,
   y,
   scale,
   opacity,
@@ -53,15 +55,22 @@ function StepCard({
   step: (typeof steps)[number];
   pos: string;
   tilt: string;
+  index: number;
   y: MotionValue<number> | 0;
   scale: MotionValue<number> | 1;
   opacity: MotionValue<number> | 1;
 }) {
   return (
-    <motion.div
-      style={y === 0 ? undefined : { y, scale, opacity }}
-      className={`relative rounded-3xl bg-white px-8 py-9 text-center shadow-[0_28px_70px_-28px_rgba(28,25,23,0.45)] md:absolute md:w-[300px] xl:w-[345px] ${pos} ${tilt}`}
+    <ScrollReveal
+      media="(max-width: 767px)"
+      delay={index * 0.1}
+      y={34}
+      className={`md:absolute md:w-[300px] xl:w-[345px] ${pos}`}
     >
+      <motion.div
+        style={y === 0 ? undefined : { y, scale, opacity }}
+        className={`relative rounded-3xl bg-white px-8 py-9 text-center shadow-[0_28px_70px_-28px_rgba(28,25,23,0.45)] ${tilt}`}
+      >
       <span className="mx-auto flex size-[72px] items-center justify-center rounded-full bg-gradient-to-br from-[#F67E50] via-[#F15A25] to-[#D14A1A] text-white shadow-[0_12px_28px_-10px_rgba(241,90,37,0.7)]">
         <step.icon size={30} weight="bold" />
       </span>
@@ -71,23 +80,21 @@ function StepCard({
       <p className="mt-2 text-[14px] leading-relaxed text-stone-500 xl:text-[14.5px]">
         {step.body}
       </p>
-    </motion.div>
+      </motion.div>
+    </ScrollReveal>
   );
 }
 
 export default function HowItWorksScene() {
   const ref = useRef<HTMLDivElement>(null);
-  const arrowRef = useRef<SVGPathElement>(null);
   const reduce = useReducedMotion();
   const [desktop, setDesktop] = useState(false);
-  const [arrowLen, setArrowLen] = useState(0);
 
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 768px)");
     const update = () => setDesktop(mq.matches);
     update();
     mq.addEventListener("change", update);
-    if (arrowRef.current) setArrowLen(arrowRef.current.getTotalLength());
     return () => mq.removeEventListener("change", update);
   }, []);
 
@@ -108,7 +115,6 @@ export default function HowItWorksScene() {
   const o0 = useTransform(scrollYProgress, [0.02, 0.18], [0, 1]);
   const o1 = useTransform(scrollYProgress, [0.12, 0.3], [0, 1]);
   const o2 = useTransform(scrollYProgress, [0.24, 0.44], [0, 1]);
-  const dash = useTransform(scrollYProgress, [0.12, 0.42], [arrowLen, 0]);
   const ys = [y0, y1, y2];
   const ss = [s0, s1, s2];
   const os = [o0, o1, o2];
@@ -116,15 +122,18 @@ export default function HowItWorksScene() {
 
   return (
     <div>
-      <h2 className="mx-auto max-w-[22ch] text-center font-display text-3xl font-extrabold tracking-tight md:text-4xl">
-        How CareTrove <span className="italic">Works</span>
-      </h2>
+      <ScrollReveal y={20}>
+        <h2 className="mx-auto max-w-[22ch] text-center font-display text-3xl font-extrabold tracking-tight md:text-4xl">
+          How CareTrove <span className="italic">Works</span>
+        </h2>
+      </ScrollReveal>
 
       <div
         ref={ref}
         className="relative mt-8 max-md:flex max-md:flex-col max-md:gap-4 md:mt-14 md:h-[900px] xl:h-[1040px]"
       >
         {/* Diagonal ellipse photo */}
+        <ScrollReveal media="(max-width: 767px)" y={30} className="md:contents">
         <div className="relative -rotate-[14deg] scale-[1.04] overflow-hidden rounded-[50%] max-md:my-8 max-md:aspect-[1.55/1] max-md:w-full md:absolute md:left-1/2 md:top-1/2 md:aspect-[1.55/1] md:w-[820px] md:-translate-x-1/2 md:-translate-y-1/2 md:rotate-[-28deg] md:scale-100 xl:w-[1040px]">
           <div className="absolute left-1/2 top-1/2 h-[172%] w-[118%] -translate-x-1/2 -translate-y-1/2 rotate-[14deg] md:rotate-[28deg]">
             <motion.div
@@ -141,31 +150,8 @@ export default function HowItWorksScene() {
             </motion.div>
           </div>
         </div>
+        </ScrollReveal>
 
-        {/* Hand-drawn arrow, draws in on scroll */}
-        <svg
-          viewBox="0 0 220 140"
-          fill="none"
-          aria-hidden
-          className="absolute right-[4%] top-[6%] w-[140px] text-ink opacity-75 md:right-[12%] md:top-[3%] xl:w-[200px]"
-        >
-          <motion.path
-            ref={arrowRef}
-            d="M204 8C170 84 96 122 18 108"
-            stroke="currentColor"
-            strokeWidth="1.6"
-            strokeLinecap="round"
-            strokeDasharray={arrowLen || undefined}
-            style={active && arrowLen ? { strokeDashoffset: dash } : undefined}
-          />
-          <path
-            d="M30 96l-14 11 17 6"
-            stroke="currentColor"
-            strokeWidth="1.6"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
 
         {/* Circular photo accent */}
         <div className="absolute bottom-[7%] left-[13%] hidden aspect-square w-[110px] overflow-hidden rounded-full shadow-[0_16px_40px_-16px_rgba(28,25,23,0.4)] md:block xl:w-[150px]">
@@ -185,6 +171,7 @@ export default function HowItWorksScene() {
             step={step}
             pos={CARDS[i].pos}
             tilt={CARDS[i].tilt}
+            index={i}
             y={active ? ys[i] : 0}
             scale={active ? ss[i] : 1}
             opacity={active ? os[i] : 1}
