@@ -143,17 +143,19 @@ export default function Home() {
         className="mx-auto max-w-[1500px] scroll-mt-20 px-5 pb-16 md:px-10 md:pb-24"
       >
         <Reveal>
-          <div className="relative overflow-hidden rounded-3xl">
-            <Image
-              src={providerBandImage}
-              alt="A therapist preparing a treatment table in a wellness studio"
-              width={2000}
-              height={900}
-              sizes="(max-width: 1500px) 100vw, 1500px"
-              className="h-[540px] w-full object-cover md:h-[560px]"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/10 to-transparent" />
-            <div className="glass-deep absolute inset-x-5 bottom-5 rounded-2xl p-7 md:inset-x-auto md:bottom-10 md:left-10 md:max-w-[500px] md:p-9">
+          <div className="relative overflow-hidden rounded-3xl max-md:bg-[#211d1a]">
+            <div className="relative">
+              <Image
+                src={providerBandImage}
+                alt="A therapist preparing a treatment table in a wellness studio"
+                width={2000}
+                height={900}
+                sizes="(max-width: 1500px) 100vw, 1500px"
+                className="h-[330px] w-full object-cover object-[62%_35%] md:h-[560px] md:object-center"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/10 to-transparent max-md:from-[#211d1a] max-md:via-transparent" />
+            </div>
+            <div className="glass-deep p-7 max-md:rounded-none md:absolute md:bottom-10 md:left-10 md:max-w-[500px] md:rounded-2xl md:p-9">
               <h2 className="font-display text-[24px] font-extrabold leading-tight tracking-tight text-white md:text-3xl">
                 Run a healthcare or wellness practice? Get discovered on
                 CareTrove.
