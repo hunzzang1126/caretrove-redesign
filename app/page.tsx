@@ -50,7 +50,7 @@ export default function Home() {
 
         <div className="relative mx-auto flex w-full max-w-[780px] flex-col items-center">
           <HeroTitle />
-          <Reveal delay={0.2} className="mt-8 w-full">
+          <Reveal delay={0.2} className="relative z-30 mt-8 w-full">
             <SearchPill />
           </Reveal>
           <Reveal delay={0.35}>
