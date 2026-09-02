@@ -24,7 +24,7 @@ type FanCard = {
 
 const LEFT_CARDS: FanCard[] = [
   {
-    src: "/images/hero-left.jpg",
+    src: "/images/hero-massage-man.jpg",
     alt: "",
     pos: "left-0 top-0 w-[112px] 2xl:w-[192px]",
     rotate: "-9deg",

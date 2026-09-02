@@ -34,7 +34,7 @@ export const categories: Category[] = [
     slug: "diagnostic",
     name: "Diagnostic",
     blurb: "Screening, lab panels",
-    image: "/images/cat-diagnostic.jpg",
+    image: "/images/cat-diagnostic-2.jpg",
   },
 ];
 
