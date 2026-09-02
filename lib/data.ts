@@ -16,7 +16,7 @@ export const categories: Category[] = [
     slug: "cosmetic",
     name: "Cosmetic",
     blurb: "Injectables, facials, laser",
-    image: "/images/cat-cosmetic.jpg",
+    image: "/images/cat-cosmetic-2.jpg",
   },
   {
     slug: "restorative",
