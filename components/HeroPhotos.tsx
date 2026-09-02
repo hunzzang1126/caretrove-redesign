@@ -34,7 +34,7 @@ const LEFT_CARDS: FanCard[] = [
     aspect: "aspect-[4/5]",
   },
   {
-    src: "/images/cat-cosmetic.jpg",
+    src: "/images/hero-facial.jpg",
     alt: "",
     pos: "left-[72px] top-[96px] w-[100px] 2xl:left-[138px] 2xl:top-[118px] 2xl:w-[178px]",
     rotate: "5deg",
@@ -44,7 +44,7 @@ const LEFT_CARDS: FanCard[] = [
     aspect: "aspect-[3/4]",
   },
   {
-    src: "/images/cat-preventative.jpg",
+    src: "/images/hero-physio.jpg",
     alt: "",
     pos: "left-[4px] top-[205px] w-[100px] 2xl:left-[16px] 2xl:top-[270px] 2xl:w-[186px]",
     rotate: "-4deg",
@@ -67,7 +67,7 @@ const RIGHT_CARDS: FanCard[] = [
     aspect: "aspect-[4/5]",
   },
   {
-    src: "/images/why-use-desk.jpg",
+    src: "/images/hero-iv.jpg",
     alt: "",
     pos: "right-[72px] top-[96px] w-[100px] 2xl:right-[138px] 2xl:top-[118px] 2xl:w-[178px]",
     rotate: "-5deg",
@@ -77,7 +77,7 @@ const RIGHT_CARDS: FanCard[] = [
     aspect: "aspect-[3/4]",
   },
   {
-    src: "/images/cat-diagnostic.jpg",
+    src: "/images/hero-laser.jpg",
     alt: "",
     pos: "right-[4px] top-[205px] w-[100px] 2xl:right-[16px] 2xl:top-[270px] 2xl:w-[186px]",
     rotate: "3deg",
