@@ -6,12 +6,18 @@ const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-jakarta",
   weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
+  preload: true,
+  fallback: ["Segoe UI", "Helvetica Neue", "Arial"],
 });
 
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
   variable: "--font-bricolage",
   weight: ["600", "700", "800"],
+  display: "swap",
+  preload: true,
+  fallback: ["Segoe UI", "Arial"],
 });
 
 export const metadata: Metadata = {

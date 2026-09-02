@@ -7,8 +7,8 @@
   --color-ink: #1c1917;
   --color-mist: #fafaf9;
   --color-cream: #faf6f0;
-  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-bricolage), var(--font-jakarta), ui-sans-serif, sans-serif;
+  --font-sans: var(--font-jakarta), "Segoe UI", ui-sans-serif, system-ui, Arial, sans-serif;
+  --font-display: var(--font-bricolage), var(--font-jakarta), "Segoe UI", ui-sans-serif, Arial, sans-serif;
 }
 
 html {
